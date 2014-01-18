@@ -64,7 +64,28 @@ QStringList makeKeyTokens_( QString const &scope, QString const &key )
   // be sure to include the canonical root node
   keyTokens.push_front( "properties" );
 
-  return keyTokens;
+  //sanitize keys since an unvalid xml name will make the project file unreadable !
+  QStringList sanitizedKeyTokens = QStringList();
+  for (int i = 0; i < keyTokens.size(); ++i){
+    QString sanitizedKey = keyTokens.at(i);
+
+    //replace invalid chars in XML document ( http://www.w3.org/TR/REC-xml/#NT-NameChar )
+    //note : it seems this should also keep \x10000-\xEFFFF but then a lot of unwanted chars remain...
+    QString nameCharRegexp = QString( "[^:A-Z_a-z\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\x2FF\\x370-\\x37D\\x37F-\\x1FFF\\x200C-\\x200D\\x2070-\\x218F\\x2C00-\\x2FEF\\x3001-\\xD7FF\\xF900-\\xFDCF\\xFDF0-\\xFFFD\\-\\.0-9\\xB7\\x0300-\\x036F\\x203F-\\x2040]" );
+    QString nameStartCharRegexp = QString( "^[^:A-Z_a-z\\xC0-\\xD6\\xD8-\\xF6\\xF8-\\x2FF\\x370-\\x37D\\x37F-\\x1FFF\\x200C-\\x200D\\x2070-\\x218F\\x2C00-\\x2FEF\\x3001-\\xD7FF\\xF900-\\xFDCF\\xFDF0-\\xFFFD]" );
+    
+    if( sanitizedKey.contains( QRegExp(nameCharRegexp) ) || sanitizedKey.contains( QRegExp(nameStartCharRegexp) ) ){
+      
+      //TODO :
+      // >>> DISPLAY SOME KIND OF MESSAGE <<<
+
+      return QStringList();
+    }
+
+    sanitizedKeyTokens.append(sanitizedKey);
+  }
+
+  return sanitizedKeyTokens;
 } // makeKeyTokens_
 
 
