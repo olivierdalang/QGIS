@@ -730,6 +730,10 @@ QgsSymbolLayerV2* QgsMarkerLineSymbolLayerV2::create( const QgsStringMap& props 
       x->setPlacement( LastVertex );
     else if ( props["placement"] == "firstvertex" )
       x->setPlacement( FirstVertex );
+    else if ( props["placement"] == "oddvertex" )
+      x->setPlacement( OddVertex );
+    else if ( props["placement"] == "evenvertex" )
+      x->setPlacement( EvenVertex );
     else if ( props["placement"] == "centralpoint" )
       x->setPlacement( CentralPoint );
     else
@@ -816,6 +820,14 @@ void QgsMarkerLineSymbolLayerV2::renderPolyline( const QPolygonF& points, QgsSym
     else if ( placementString.compare( "firstvertex", Qt::CaseInsensitive ) == 0 )
     {
       placement = FirstVertex;
+    }
+    else if ( placementString.compare( "oddvertex", Qt::CaseInsensitive ) == 0 )
+    {
+      placement = OddVertex;
+    }
+    else if ( placementString.compare( "evenvertex", Qt::CaseInsensitive ) == 0 )
+    {
+      placement = EvenVertex;
     }
     else if ( placementString.compare( "centerpoint", Qt::CaseInsensitive ) == 0 )
     {
@@ -964,7 +976,7 @@ void QgsMarkerLineSymbolLayerV2::renderPolylineVertex( const QPolygonF& points, 
   QgsRenderContext& rc = context.renderContext();
 
   double origAngle = mMarker->angle();
-  int i, maxCount;
+  int i, inc, maxCount;
   bool isRing = false;
 
   double offsetAlongLine = mOffsetAlongLine;
@@ -982,16 +994,31 @@ void QgsMarkerLineSymbolLayerV2::renderPolylineVertex( const QPolygonF& points, 
   if ( placement == FirstVertex )
   {
     i = 0;
+    inc = 1;
     maxCount = 1;
   }
   else if ( placement == LastVertex )
   {
     i = points.count() - 1;
+    inc = 1;
+    maxCount = points.count();
+  }
+  else if ( placement == OddVertex )
+  {
+    i = 1;
+    inc = 2;
+    maxCount = points.count();
+  }
+  else if ( placement == EvenVertex )
+  {
+    i = 0;
+    inc = 2;
     maxCount = points.count();
   }
   else
   {
     i = 0;
+    inc = 1;
     maxCount = points.count();
     if ( points.first() == points.last() )
       isRing = true;
@@ -1007,7 +1034,7 @@ void QgsMarkerLineSymbolLayerV2::renderPolylineVertex( const QPolygonF& points, 
     return;
   }
 
-  for ( ; i < maxCount; ++i )
+  for ( ; i < maxCount; i+=inc )
   {
     if ( isRing && placement == Vertex && i == points.count() - 1 )
     {
@@ -1229,6 +1256,10 @@ QgsStringMap QgsMarkerLineSymbolLayerV2::properties() const
     map["placement"] = "lastvertex";
   else if ( mPlacement == FirstVertex )
     map["placement"] = "firstvertex";
+  else if ( mPlacement == OddVertex )
+    map["placement"] = "oddvertex";
+  else if ( mPlacement == EvenVertex )
+    map["placement"] = "evenvertex";
   else if ( mPlacement == CentralPoint )
     map["placement"] = "centralpoint";
   else
@@ -1294,6 +1325,12 @@ void QgsMarkerLineSymbolLayerV2::toSld( QDomDocument &doc, QDomElement &element,
         break;
       case LastVertex:
         symbolizerElem.appendChild( QgsSymbolLayerV2Utils::createVendorOptionElement( doc, "placement", "lastPoint" ) );
+        break;
+      case EvenVertex:
+        symbolizerElem.appendChild( QgsSymbolLayerV2Utils::createVendorOptionElement( doc, "placement", "evenPoint" ) );
+        break;
+      case OddVertex:
+        symbolizerElem.appendChild( QgsSymbolLayerV2Utils::createVendorOptionElement( doc, "placement", "oddPoint" ) );
         break;
       case CentralPoint:
         symbolizerElem.appendChild( QgsSymbolLayerV2Utils::createVendorOptionElement( doc, "placement", "centralPoint" ) );
@@ -1373,6 +1410,8 @@ QgsSymbolLayerV2* QgsMarkerLineSymbolLayerV2::createFromSld( QDomElement &elemen
       if ( it.value() == "points" ) placement = Vertex;
       else if ( it.value() == "firstPoint" ) placement = FirstVertex;
       else if ( it.value() == "lastPoint" ) placement = LastVertex;
+      else if ( it.value() == "evenPoint" ) placement = EvenVertex;
+      else if ( it.value() == "oddPoint" ) placement = OddVertex;
       else if ( it.value() == "centralPoint" ) placement = CentralPoint;
     }
     else if ( it.value() == "rotateMarker" )

@@ -158,6 +158,8 @@ class CORE_EXPORT QgsMarkerLineSymbolLayerV2 : public QgsLineSymbolLayerV2
       Vertex,
       LastVertex,
       FirstVertex,
+      OddVertex,
+      EvenVertex,
       CentralPoint
     };
 
@@ -211,6 +213,7 @@ class CORE_EXPORT QgsMarkerLineSymbolLayerV2 : public QgsLineSymbolLayerV2
     /**Returns the offset along the line for the marker placement. For Interval placements, this is the distance
      * between the start of the line and the first marker. For FirstVertex and LastVertex placements, this is the
      * distance between the marker and the start of the line or the end of the line respectively.
+     * TODO : ADD DESCRIPTION FOR ODD EVEN
      * This setting has no effect for Vertex or CentralPoint placements.
      * @returns The offset along the line. The unit for the offset is retrievable via offsetAlongLineUnit.
      * @note added in 2.3

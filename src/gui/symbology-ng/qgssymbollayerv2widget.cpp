@@ -1550,6 +1550,10 @@ void QgsMarkerLineSymbolLayerV2Widget::setPlacement()
     mLayer->setPlacement( QgsMarkerLineSymbolLayerV2::LastVertex );
   else if ( radVertexFirst->isChecked() )
     mLayer->setPlacement( QgsMarkerLineSymbolLayerV2::FirstVertex );
+  else if ( radVertexOdd->isChecked() )
+    mLayer->setPlacement( QgsMarkerLineSymbolLayerV2::OddVertex );
+  else if ( radVertexEven->isChecked() )
+    mLayer->setPlacement( QgsMarkerLineSymbolLayerV2::EvenVertex );
   else
     mLayer->setPlacement( QgsMarkerLineSymbolLayerV2::CentralPoint );
 
