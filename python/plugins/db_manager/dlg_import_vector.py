@@ -304,7 +304,9 @@ class DlgImportVector(QDialog, Ui_Dialog):
 				self.inLayer.setProviderEncoding( enc )
 
 			# do the import!
-			ret, errMsg = qgis.core.QgsVectorLayerImport.importLayer( self.inLayer, uri, providerName, outCrs, False, False, options )
+			self.dlg = QProgressDialog(self)
+			ret, errMsg = qgis.core.QgsVectorLayerImport.importLayer( self.inLayer, uri, providerName, outCrs, False, False, options, self.dlg )
+			self.dlg = None
 		except Exception as e:
 			ret = -1
 			errMsg = unicode( e )
