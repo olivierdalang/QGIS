@@ -56,6 +56,7 @@ class TestQgsGeometryUtils: public QObject
     void testClosestPoint();
     void testSegmentIntersection();
     void testLineCircleIntersection();
+    void testPointContinuesArc();
 };
 
 
@@ -813,6 +814,33 @@ void TestQgsGeometryUtils::testLineCircleIntersection()
   linePoint2 = QgsPoint( 5, 2 );
   isIntersection = QgsGeometryUtils::lineCircleIntersection( center, radius, linePoint1, linePoint2, intersection );
   QVERIFY( !isIntersection );
+}
+
+void TestQgsGeometryUtils::testPointContinuesArc()
+{
+  // normal arcs
+  QVERIFY( QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 1, -1 ), 0.000000001, 0.000001 ) );
+  QVERIFY( QgsGeometryUtils::pointContinuesArc( QgsPoint( 2, 0 ), QgsPoint( 1, 1 ), QgsPoint( 0, 0 ), QgsPoint( 1, -1 ), 0.000000001, 0.000001 ) );
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 3, 0 ), 0.000000001, 0.000001 ) );
+  QVERIFY( QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.29289321881, 0.707106781 ), QgsPoint( 1, 1 ), QgsPoint( 1.707106781, 0.707106781 ), 0.00001, 0.00001 ) );
+
+  // irregular spacing
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.29289321881, 0.707106781 ), QgsPoint( 1, 1 ), QgsPoint( 1, -1 ), 0.00001, 0.00001 ) );
+
+  // inside current arc
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.29289321881, 0.707106781 ), QgsPoint( 1, 1 ), QgsPoint( 0.29289321881, 0.707106781 ), 0.00001, 0.00001 ) );
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.29289321881, 0.707106781 ), QgsPoint( 1, 1 ), QgsPoint( 1, 1 ), 0.00001, 0.00001 ) );
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.29289321881, 0.707106781 ), QgsPoint( 1, 1 ), QgsPoint( 0, 0 ), 0.00001, 0.00001 ) );
+
+  // colinear points
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 0.5, 0.5 ), QgsPoint( 1, 1 ), QgsPoint( 1.5, 1.5 ), 0.00001, 0.00001 ) );
+
+  // with a bit more tolerance
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 1.01, -1 ), 0.000000001, 0.05 ) );
+  QVERIFY( QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 1.01, -1 ), 0.1, 0.05 ) );
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 1.01, -1 ), 0.1, 0.000001 ) );
+  QVERIFY( !QgsGeometryUtils::pointContinuesArc( QgsPoint( 0, 0 ), QgsPoint( 1, 1 ), QgsPoint( 2, 0 ), QgsPoint( 1.01, -1 ), 0.000000001, 0.05 ) );
+
 }
 
 QGSTEST_MAIN( TestQgsGeometryUtils )
