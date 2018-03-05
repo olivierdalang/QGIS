@@ -24,6 +24,7 @@
 #include "qgsalgorithmcentroid.h"
 #include "qgsalgorithmclip.h"
 #include "qgsalgorithmconvexhull.h"
+#include "qgsalgorithmconverttocurves.h"
 #include "qgsalgorithmdissolve.h"
 #include "qgsalgorithmdropgeometry.h"
 #include "qgsalgorithmdropmzvalues.h"
@@ -115,6 +116,7 @@ void QgsNativeAlgorithms::loadAlgorithms()
   addAlgorithm( new QgsCentroidAlgorithm() );
   addAlgorithm( new QgsClipAlgorithm() );
   addAlgorithm( new QgsCollectAlgorithm() );
+  addAlgorithm( new QgsConvertToCurvesAlgorithm() );
   addAlgorithm( new QgsConvexHullAlgorithm() );
   addAlgorithm( new QgsDissolveAlgorithm() );
   addAlgorithm( new QgsDropGeometryAlgorithm() );

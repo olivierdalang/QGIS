@@ -27,6 +27,7 @@ SET(QGIS_ANALYSIS_SRCS
   processing/qgsalgorithmcentroid.cpp
   processing/qgsalgorithmclip.cpp
   processing/qgsalgorithmconvexhull.cpp
+  processing/qgsalgorithmconverttocurves.cpp
   processing/qgsalgorithmdissolve.cpp
   processing/qgsalgorithmdropgeometry.cpp
   processing/qgsalgorithmdropmzvalues.cpp
