@@ -251,7 +251,7 @@ class CORE_EXPORT QgsGeometryUtils
      * that arc portion already described by \a a1, \a a2 and \a a3.
      *
      * The \a distanceTolerance specifies the maximum deviation allowed between the original location
-     * of point \b and where it would fall on the candidated arc.
+     * of point \b and where it would fall on the candidate arc.
      *
      * This method only consider a segments as continuing an arc if the points are all regularly spaced
      * on the candidate arc. The \a pointSpacingAngleTolerance parameter specifies the maximum
