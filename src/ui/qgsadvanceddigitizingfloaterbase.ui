@@ -30,7 +30,7 @@
     <number>2</number>
    </property>
    <item row="3" column="1">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="mAngleLabel">
      <property name="text">
       <string>a</string>
      </property>
@@ -114,14 +114,14 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="mXLabel">
      <property name="text">
       <string>x</string>
      </property>
     </widget>
    </item>
    <item row="5" column="1">
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="mYLabel">
      <property name="text">
       <string>y</string>
      </property>
@@ -153,11 +153,24 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="mDistanceLabel">
      <property name="text">
       <string>d</string>
      </property>
     </widget>
+   </item>
+   <item row="6" column="3">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

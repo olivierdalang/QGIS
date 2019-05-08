@@ -84,21 +84,29 @@ void QgsAdvancedDigitizingFloater::updatePos(QPoint pos)
 void QgsAdvancedDigitizingFloater::changeX(QString text)
 {
 	mXLineEdit->setText(text);
+	mXLineEdit->setVisible(text != QString(""));
+	mXLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeY(QString text)
 {
 	mYLineEdit->setText(text);
+	mYLineEdit->setVisible(text != QString(""));
+	mYLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeDistance(QString text)
 {
 	mDistanceLineEdit->setText(text);
+	mDistanceLineEdit->setVisible(text != QString(""));
+	mDistanceLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeAngle(QString text)
 {
 	mAngleLineEdit->setText(text);
+	mAngleLineEdit->setVisible(text != QString(""));
+	mAngleLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeLockX(bool enabled)
