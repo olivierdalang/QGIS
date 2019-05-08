@@ -527,6 +527,20 @@ Running QGIS from within MSVC:
   Run.
   Ignore the "These projects are out of date" message, it appeares even if no files were was changed.
 
+Compiling QGIS with Ninja:
+  Compiling with Ninja can drastically reduce the time it takes, especially for rebuilds.
+  Run the batch file OSGeo4W-dev.bat you created before. On the command prompt run:
+
+  ```
+  cd path/to/qgis/source
+  mkdir build
+  cd build
+  cmake -G Ninja -D CMAKE_BUILD_TYPE=RELWITHDEBINFO ..
+  ninja
+  # optionally specifiy which targets to rebuild to further reduce building time
+  ninja qgis_gui
+  ```
+
 Old alternative method that might still work using cmake-gui:
   Create a 'build' directory somewhere. This will be where all the build output
   will be generated.
