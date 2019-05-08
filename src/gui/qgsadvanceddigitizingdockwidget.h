@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "ui_qgsadvanceddigitizingdockwidgetbase.h"
+#include "qgsadvanceddigitizingfloater.h"
 #include "qgis_gui.h"
 #include "qgis_sip.h"
 #include "qgsdockwidget.h"
@@ -30,6 +31,7 @@
 
 
 class QgsAdvancedDigitizingCanvasItem;
+class QgsAdvancedDigitizingFloater;
 class QgsMapCanvas;
 class QgsMapTool;
 class QgsMapToolAdvancedDigitizing;
@@ -399,6 +401,9 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
      */
     void activateCad( bool enabled );
 
+    //! enable/disable floater
+    void toggleFloater( bool enabled );
+
     //! enable/disable construction mode (events are not forwarded to the map tool)
     void setConstructionMode( bool enabled );
 
@@ -468,6 +473,9 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     CadCapacities mCapacities = nullptr;
 
     bool mCurrentMapToolSupportsCad = false;
+
+    // Pointer to the floater
+    QgsAdvancedDigitizingFloater *mFloater = nullptr;
 
     // CAD properties
     //! is CAD currently enabled for current map tool
