@@ -38,6 +38,32 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater(QgsMapCanvas *canvas,
   mYLineEdit->installEventFilter( cadDockWidget );
 
 	//connect(mEnableAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::activateCad);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueXChanged, this, &QgsAdvancedDigitizingFloater::changeX);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueYChanged, this, &QgsAdvancedDigitizingFloater::changeY);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueAngleChanged, this, &QgsAdvancedDigitizingFloater::changeAngle);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueDistanceChanged, this, &QgsAdvancedDigitizingFloater::changeDistance);
+
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockXChanged, this, &QgsAdvancedDigitizingFloater::changeLockX);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockYChanged, this, &QgsAdvancedDigitizingFloater::changeLockY);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockAngleChanged, this, &QgsAdvancedDigitizingFloater::changeLockAngle);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockDistanceChanged, this, &QgsAdvancedDigitizingFloater::changeLockDistance);
+
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnX, this, &QgsAdvancedDigitizingFloater::focusOnX);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnY, this, &QgsAdvancedDigitizingFloater::focusOnY);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnAngle, this, &QgsAdvancedDigitizingFloater::focusOnAngle);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnDistance, this, &QgsAdvancedDigitizingFloater::focusOnDistance);
+
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedX, this, &QgsAdvancedDigitizingFloater::enabledChangedX);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedY, this, &QgsAdvancedDigitizingFloater::enabledChangedY);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedAngle, this, &QgsAdvancedDigitizingFloater::enabledChangedAngle);
+  connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedDistance, this, &QgsAdvancedDigitizingFloater::enabledChangedDistance);
+
+  connect(mXLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setX(mXLineEdit->text()); });
+  connect(mYLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setY(mYLineEdit->text()); });
+  connect(mAngleLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setAngle(mAngleLineEdit->text()); });
+  connect(mDistanceLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setDistance(mDistanceLineEdit->text()); });
+
+
 }
 
 bool QgsAdvancedDigitizingFloater::eventFilter(QObject *obj, QEvent *event)
@@ -84,34 +110,26 @@ void QgsAdvancedDigitizingFloater::updatePos(QPoint pos)
 void QgsAdvancedDigitizingFloater::changeX(QString text)
 {
 	mXLineEdit->setText(text);
-	mXLineEdit->setVisible(text != QString(""));
-	mXLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeY(QString text)
 {
 	mYLineEdit->setText(text);
-	mYLineEdit->setVisible(text != QString(""));
-	mYLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeDistance(QString text)
 {
 	mDistanceLineEdit->setText(text);
-	mDistanceLineEdit->setVisible(text != QString(""));
-	mDistanceLabel->setVisible(text != QString(""));
 }
 
 void QgsAdvancedDigitizingFloater::changeAngle(QString text)
 {
 	mAngleLineEdit->setText(text);
-	mAngleLineEdit->setVisible(text != QString(""));
-	mAngleLabel->setVisible(text != QString(""));
 }
 
-void QgsAdvancedDigitizingFloater::changeLockX(bool enabled)
+void QgsAdvancedDigitizingFloater::changeLockX(bool locked)
 {
-	if (!enabled) {
+	if (!locked) {
 		mXLineEdit->setStyleSheet("");
 	}
 	else {
@@ -119,9 +137,9 @@ void QgsAdvancedDigitizingFloater::changeLockX(bool enabled)
 	}
 }
 
-void QgsAdvancedDigitizingFloater::changeLockY(bool enabled)
+void QgsAdvancedDigitizingFloater::changeLockY(bool locked)
 {
-	if (!enabled) {
+	if (!locked) {
 		mYLineEdit->setStyleSheet("");
 	}
 	else {
@@ -129,9 +147,9 @@ void QgsAdvancedDigitizingFloater::changeLockY(bool enabled)
 	}
 }
 
-void QgsAdvancedDigitizingFloater::changeLockDistance(bool enabled)
+void QgsAdvancedDigitizingFloater::changeLockDistance(bool locked)
 {
-	if (!enabled) {
+	if (!locked) {
 		mDistanceLineEdit->setStyleSheet("");
 	}
 	else {
@@ -139,12 +157,69 @@ void QgsAdvancedDigitizingFloater::changeLockDistance(bool enabled)
 	}
 }
 
-void QgsAdvancedDigitizingFloater::changeLockAngle(bool enabled)
+void QgsAdvancedDigitizingFloater::changeLockAngle(bool locked)
 {
-	if (!enabled) {
+	if (!locked) {
 		mAngleLineEdit->setStyleSheet("");
 	}
 	else {
 		mAngleLineEdit->setStyleSheet("font-weight: bold");
 	}
+}
+
+void QgsAdvancedDigitizingFloater::focusOnX()
+{
+	if(mActive){
+	mXLineEdit->setFocus();
+    mXLineEdit->selectAll();
+	}
+}
+
+void QgsAdvancedDigitizingFloater::focusOnY()
+{
+	if (mActive) {
+		mYLineEdit->setFocus();
+    mYLineEdit->selectAll();
+}
+}
+
+void QgsAdvancedDigitizingFloater::focusOnDistance()
+{
+	if (mActive) {
+		mDistanceLineEdit->setFocus();
+    mDistanceLineEdit->selectAll();
+}
+}
+
+void QgsAdvancedDigitizingFloater::focusOnAngle()
+{
+	if (mActive) {
+		mAngleLineEdit->setFocus();
+    mAngleLineEdit->selectAll();
+}
+}
+
+
+void QgsAdvancedDigitizingFloater::enabledChangedX(bool enabled)
+{
+	mXLineEdit->setVisible(enabled);
+	mXLabel->setVisible(enabled);
+}
+
+void QgsAdvancedDigitizingFloater::enabledChangedY(bool enabled)
+{
+	mYLineEdit->setVisible(enabled);
+	mYLabel->setVisible(enabled);
+}
+
+void QgsAdvancedDigitizingFloater::enabledChangedDistance(bool enabled)
+{
+	mDistanceLineEdit->setVisible(enabled);
+	mDistanceLabel->setVisible(enabled);
+}
+
+void QgsAdvancedDigitizingFloater::enabledChangedAngle(bool enabled)
+{
+	mAngleLineEdit->setVisible(enabled);
+	mAngleLabel->setVisible(enabled);
 }

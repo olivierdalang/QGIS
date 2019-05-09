@@ -42,14 +42,25 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
 
   public slots:
     void setActive(bool active);
-    void changeX(QString text);
-    void changeY(QString text);
-    void changeDistance(QString text);
-    void changeAngle(QString text);
-    void changeLockX(bool enabled);
-    void changeLockY(bool enabled);
-    void changeLockDistance(bool enabled);
-    void changeLockAngle(bool enabled);
+
+private slots:
+
+	void changeX(QString text);
+	void changeY(QString text);
+	void changeDistance(QString text);
+	void changeAngle(QString text);
+	void changeLockX(bool locked);
+	void changeLockY(bool locked);
+	void changeLockDistance(bool locked);
+	void changeLockAngle(bool locked);
+	void focusOnX();
+	void focusOnY();
+	void focusOnAngle();
+	void focusOnDistance();
+	void enabledChangedX(bool enabled);
+	void enabledChangedY(bool enabled);
+	void enabledChangedAngle(bool enabled);
+	void enabledChangedDistance(bool enabled);
 
   private:
 

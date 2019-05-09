@@ -370,6 +370,38 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
      */
     void pointChanged( const QgsPointXY &point );
 
+	// These are emitted when the value of the field has changed (either the mouse moved, or the user changed the input)
+	void valueXChanged(QString value);
+	void valueYChanged(QString value);
+	void valueAngleChanged(QString value);
+	void valueDistanceChanged(QString value);
+
+	// These are emitted when locked state was changed (either after an input, or the user triggered the lock)
+	void lockXChanged(bool locked);
+	void lockYChanged(bool locked);
+	void lockAngleChanged(bool locked);
+	void lockDistanceChanged(bool locked);
+
+	// These are emitted when a is enabled/disabled
+	void enabledChangedX(bool enabled);
+	void enabledChangedY(bool enabled);
+	void enabledChangedAngle(bool enabled);
+	void enabledChangedDistance(bool enabled);
+
+	// These are emitted when a field gets the focus (allowing other widget to capture the focus)
+	void focusOnX();
+	void focusOnY();
+	void focusOnAngle();
+	void focusOnDistance();
+
+
+  public slots:
+	  void setX(QString value);
+	  void setY(QString value);
+	  void setAngle(QString value);
+	  void setDistance(QString value);
+
+
   private slots:
     //! Sets the additional constraint by clicking on the perpendicular/parallel buttons
     void additionalConstraintClicked( bool activated );
