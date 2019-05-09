@@ -203,6 +203,7 @@ void QgsAdvancedDigitizingDockWidget::setCadEnabled( bool enabled )
   mPerpendicularAction->setEnabled( enabled );
   mSettingsAction->setEnabled( enabled );
   mInputWidgets->setEnabled( enabled );
+  mToggleFloaterAction->setEnabled( enabled );
 
   clear();
   setConstructionMode( false );
