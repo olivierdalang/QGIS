@@ -474,7 +474,7 @@
    </property>
    <property name="icon">
     <iconset resource="../../images/images.qrc">
-     <normaloff>:/images/themes/default/propertyicons/display.svg</normaloff>:/images/themes/default/propertyicons/display.svg</iconset>
+     <normaloff>:/images/themes/default/cadtools/floater.svg</normaloff>:/images/themes/default/cadtools/floater.svg</iconset>
    </property>
    <property name="text">
     <string>Toggle Floater</string>
