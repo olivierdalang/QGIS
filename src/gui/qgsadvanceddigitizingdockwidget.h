@@ -395,6 +395,17 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     void lockDistanceChanged( bool locked );
 
     /**
+    * Emitted whenever the parameter is toggled between absolute and relative.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param relative Whether the parameter is relative or not.
+    */
+    void relativeXChanged( bool relative );
+    void relativeYChanged( bool relative );
+    void relativeAngleChanged( bool relative );
+    // void relativeDistanceChanged( bool relative ); // distance is always relative
+
+    /**
     * Emitted whenever the field is enabled or disabled. Depending on the context, some parameters
     * dont make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.

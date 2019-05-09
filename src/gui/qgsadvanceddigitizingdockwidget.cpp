@@ -243,14 +243,17 @@ void QgsAdvancedDigitizingDockWidget::setConstraintRelative( bool activate )
   if ( sender() == mRelativeAngleButton )
   {
     mAngleConstraint->setRelative( activate );
+    emit relativeAngleChanged(activate);
   }
   else if ( sender() == mRelativeXButton )
   {
     mXConstraint->setRelative( activate );
+    emit relativeXChanged(activate);
   }
   else if ( sender() == mRelativeYButton )
   {
     mYConstraint->setRelative( activate );
+    emit relativeYChanged(activate);
   }
 }
 
@@ -556,11 +559,13 @@ void QgsAdvancedDigitizingDockWidget::updateCapacity( bool updateUIwithoutChange
   if ( !relativeAngle )
   {
     mAngleConstraint->setRelative( false );
+    emit relativeAngleChanged(false);
   }
   else if ( relativeAngle && !mCapacities.testFlag( RelativeAngle ) )
   {
     // set angle mode to relative if can do and wasn't available before
     mAngleConstraint->setRelative( true );
+    emit relativeAngleChanged(true);
   }
 
   // distance is always relative
@@ -912,6 +917,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
         if ( mCapacities.testFlag( RelativeCoordinates ) )
         {
           mXConstraint->toggleRelative();
+          emit relativeXChanged(mXConstraint->relative());
           emit pointChanged( mCadPointList.value( 0 ) );
           e->accept();
         }
@@ -941,6 +947,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
         if ( mCapacities.testFlag( RelativeCoordinates ) )
         {
           mYConstraint->toggleRelative();
+          emit relativeYChanged(mYConstraint->relative());
           emit pointChanged( mCadPointList.value( 0 ) );
           e->accept();
         }
@@ -973,6 +980,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
         if ( mCapacities.testFlag( RelativeAngle ) )
         {
           mAngleConstraint->toggleRelative();
+          emit relativeAngleChanged(mAngleConstraint->relative());
           emit pointChanged( mCadPointList.value( 0 ) );
           e->accept();
         }

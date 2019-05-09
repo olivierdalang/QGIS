@@ -50,6 +50,11 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockAngleChanged, this, &QgsAdvancedDigitizingFloater::changeLockAngle );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::lockDistanceChanged, this, &QgsAdvancedDigitizingFloater::changeLockDistance );
 
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::relativeXChanged, this, &QgsAdvancedDigitizingFloater::changeRelativeX );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::relativeYChanged, this, &QgsAdvancedDigitizingFloater::changeRelativeY );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::relativeAngleChanged, this, &QgsAdvancedDigitizingFloater::changeRelativeAngle );
+  // distance is always relative
+
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnX, this, &QgsAdvancedDigitizingFloater::focusOnX );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnY, this, &QgsAdvancedDigitizingFloater::focusOnY );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnAngle, this, &QgsAdvancedDigitizingFloater::focusOnAngle );
@@ -138,10 +143,12 @@ void QgsAdvancedDigitizingFloater::changeLockX( bool locked )
   if ( !locked )
   {
     mXLineEdit->setStyleSheet( "" );
+    mXLabel->setStyleSheet( "" );
   }
   else
   {
     mXLineEdit->setStyleSheet( "font-weight: bold" );
+    mXLabel->setStyleSheet( "font-weight: bold" );
   }
 }
 
@@ -150,10 +157,12 @@ void QgsAdvancedDigitizingFloater::changeLockY( bool locked )
   if ( !locked )
   {
     mYLineEdit->setStyleSheet( "" );
+    mYLabel->setStyleSheet( "" );
   }
   else
   {
     mYLineEdit->setStyleSheet( "font-weight: bold" );
+    mYLabel->setStyleSheet( "font-weight: bold" );
   }
 }
 
@@ -162,10 +171,12 @@ void QgsAdvancedDigitizingFloater::changeLockDistance( bool locked )
   if ( !locked )
   {
     mDistanceLineEdit->setStyleSheet( "" );
+    mDistanceLabel->setStyleSheet( "" );
   }
   else
   {
     mDistanceLineEdit->setStyleSheet( "font-weight: bold" );
+    mDistanceLabel->setStyleSheet( "font-weight: bold" );
   }
 }
 
@@ -174,10 +185,51 @@ void QgsAdvancedDigitizingFloater::changeLockAngle( bool locked )
   if ( !locked )
   {
     mAngleLineEdit->setStyleSheet( "" );
+    mAngleLabel->setStyleSheet( "" );
   }
   else
   {
     mAngleLineEdit->setStyleSheet( "font-weight: bold" );
+    mAngleLabel->setStyleSheet( "font-weight: bold" );
+  }
+}
+
+
+void QgsAdvancedDigitizingFloater::changeRelativeX( bool relative )
+{
+  if ( !relative )
+  {
+    mXLabel->setText( "x" );
+  }
+  else
+  {
+    mXLabel->setText( "Δx" );
+  }
+}
+
+void QgsAdvancedDigitizingFloater::changeRelativeY( bool relative )
+{
+  if ( !relative )
+  {
+    mYLabel->setText( "y" );
+  }
+  else
+  {
+    mYLabel->setText( "Δy" );
+  }
+}
+
+// distance is always relative
+
+void QgsAdvancedDigitizingFloater::changeRelativeAngle( bool relative )
+{
+  if ( !relative )
+  {
+    mAngleLabel->setText( "a" );
+  }
+  else
+  {
+    mAngleLabel->setText( "Δa" );
   }
 }
 

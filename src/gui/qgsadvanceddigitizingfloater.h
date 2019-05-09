@@ -67,6 +67,10 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     void changeLockY( bool locked );
     void changeLockDistance( bool locked );
     void changeLockAngle( bool locked );
+    void changeRelativeX( bool relative );
+    void changeRelativeY( bool relative );
+    // void changeRelativeDistance( bool relative );  // doesn't happen
+    void changeRelativeAngle( bool relative );
     void focusOnX();
     void focusOnY();
     void focusOnAngle();

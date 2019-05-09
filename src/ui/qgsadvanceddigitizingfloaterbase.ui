@@ -32,7 +32,7 @@
    <item row="3" column="1">
     <widget class="QLabel" name="mAngleLabel">
      <property name="text">
-      <string>a</string>
+      <string>Δa</string>
      </property>
     </widget>
    </item>
