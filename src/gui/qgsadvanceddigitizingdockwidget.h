@@ -370,25 +370,46 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
      */
     void pointChanged( const QgsPointXY &point );
 
-	// These are emitted when the value of the field has changed (either the mouse moved, or the user changed the input)
+	//! Signals for external widgets that need to update according to current values
+
+	/**
+	* Emitted whenever the value changes (either the mouse moved, or the user changed the input).
+	* Could be used by widgets that must reflect the current advanced digitizing state.
+	*
+	* \param value The current value (as a QString, as it could be an expression).
+	*/
 	void valueXChanged(QString value);
 	void valueYChanged(QString value);
 	void valueAngleChanged(QString value);
 	void valueDistanceChanged(QString value);
 
-	// These are emitted when locked state was changed (either after an input, or the user triggered the lock)
+	/**
+	* Emitted whenever the parameter is locked.
+	* Could be used by widgets that must reflect the current advanced digitizing state.
+	*
+	* \param locked Whether the parameter is locked or not.
+	*/
 	void lockXChanged(bool locked);
 	void lockYChanged(bool locked);
 	void lockAngleChanged(bool locked);
 	void lockDistanceChanged(bool locked);
 
-	// These are emitted when a is enabled/disabled
+	/**
+	* Emitted whenever the field is enabled or disabled. Depending on the context, some parameters
+	* dont make sense (e.g. you need a previous point to define a distance).
+	* Could be used by widgets that must reflect the current advanced digitizing state.
+	*
+	* \param enabled Whether the parameter is enabled or not.
+	*/
 	void enabledChangedX(bool enabled);
 	void enabledChangedY(bool enabled);
 	void enabledChangedAngle(bool enabled);
 	void enabledChangedDistance(bool enabled);
 
-	// These are emitted when a field gets the focus (allowing other widget to capture the focus)
+	/**
+	* Emitted whenever the field should get the focus using the shortcuts (X, Y, A, D).
+	* Could be used by widgets to capture the focus when a field is being edited.
+	*/
 	void focusOnX();
 	void focusOnY();
 	void focusOnAngle();
@@ -396,6 +417,12 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
 
 
   public slots:
+	  /**
+	  * Set and lock the parameter.
+	  * Can be used to set constraints.
+	  *
+	  * \param value The current value (as a QString, as it could be an expression).
+	  */
 	  void setX(QString value);
 	  void setY(QString value);
 	  void setAngle(QString value);

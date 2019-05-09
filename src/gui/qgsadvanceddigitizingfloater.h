@@ -27,6 +27,12 @@
 class QgsMapCanvas;
 class QgsAdvancedDigitizingDockWidget;
 
+/**
+* \ingroup gui
+* \brief The QgsAdvancedDigitizingFloater class is widget that floats
+* next to the mouse pointer, and allow interaction with the AdvancedDigitizing
+* feature. It proxies display and actions to QgsMapToolAdvancedDigitizingDockWidget.
+*/
 class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsAdvancedDigitizingFloaterBase
 {
     Q_OBJECT
@@ -36,11 +42,18 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     explicit QgsAdvancedDigitizingFloater(QgsMapCanvas *canvas, QgsAdvancedDigitizingDockWidget *cadDockWidget);
 
     /**
-    * getter for mActive
+    * Whether the floater is active or not.
+    * Note that the floater may be active but not visible (e.g. if the mouse is not over the canvas).
     */
     bool active();
 
   public slots:
+	  /**
+	  * Set whether the floater should be active or not.
+    * Note that the floater may be active but not visible (e.g. if the mouse is not over the canvas).
+	  *
+	  * \param active
+	  */
     void setActive(bool active);
 
 private slots:
@@ -70,9 +83,6 @@ private slots:
 	  //! pointer to map cad docker widget
 	  QgsAdvancedDigitizingDockWidget *mCadDockWidget = nullptr;
 
-	//! Whether the floater is enabled
-	bool mActive = false;
-
 	/**
 	* event filter to track mouse position
 	* \note defined as private in Python bindings
@@ -84,6 +94,9 @@ private slots:
     * \param pos position of the cursor
 	*/
 	void updatePos(QPoint pos);
+
+	//! Whether the floater is enabled.
+	bool mActive = false;
 
 };
 

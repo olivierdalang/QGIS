@@ -28,16 +28,18 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater(QgsMapCanvas *canvas,
 	setWindowFlag(Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TransparentForMouseEvents);
   setVisible(false);
+
+  // This is required to be able to track mouse move events
 	mMapCanvas->viewport()->installEventFilter(this);
 	mMapCanvas->viewport()->setMouseTracking(true);
 
-  // We use the same event filter so that shortcuts are still active
+  // We reuse cadDockWidget's eventFilter for the CAD specific shortcuts
   mAngleLineEdit->installEventFilter( cadDockWidget );
   mDistanceLineEdit->installEventFilter( cadDockWidget );
   mXLineEdit->installEventFilter( cadDockWidget );
   mYLineEdit->installEventFilter( cadDockWidget );
 
-	//connect(mEnableAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::activateCad);
+	// Connect all cadDockWidget's signals to update the widget's display
   connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueXChanged, this, &QgsAdvancedDigitizingFloater::changeX);
   connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueYChanged, this, &QgsAdvancedDigitizingFloater::changeY);
   connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueAngleChanged, this, &QgsAdvancedDigitizingFloater::changeAngle);
@@ -58,12 +60,11 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater(QgsMapCanvas *canvas,
   connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedAngle, this, &QgsAdvancedDigitizingFloater::enabledChangedAngle);
   connect(cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedDistance, this, &QgsAdvancedDigitizingFloater::enabledChangedDistance);
 
+	// Connect our line edits signals to update cadDockWidget's tate
   connect(mXLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setX(mXLineEdit->text()); });
   connect(mYLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setY(mYLineEdit->text()); });
   connect(mAngleLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setAngle(mAngleLineEdit->text()); });
   connect(mDistanceLineEdit, &QLineEdit::returnPressed, cadDockWidget, [=]() { cadDockWidget->setDistance(mDistanceLineEdit->text()); });
-
-
 }
 
 bool QgsAdvancedDigitizingFloater::eventFilter(QObject *obj, QEvent *event)
@@ -71,17 +72,20 @@ bool QgsAdvancedDigitizingFloater::eventFilter(QObject *obj, QEvent *event)
 	if (mCadDockWidget->cadEnabled() && mActive) {
 		if (event->type() == QEvent::MouseMove)
 		{
+      // We update the position when mouse moves
 			QMouseEvent *mouseEvent = dynamic_cast<QMouseEvent *>(event);
 			updatePos(mouseEvent->pos());
 		}
 		else if (event->type() == QEvent::Enter)
 		{
+      // We show the widget when mouse enters
 			QEnterEvent  *enterEvent = dynamic_cast<QEnterEvent  *>(event);
 			updatePos(enterEvent->pos());
 			setVisible(true);
 		}
 		else if (event->type() == QEvent::Leave)
 		{
+      // We hide the widget when mouse leaves
 			setVisible(false);
 		}
 	}
@@ -92,6 +96,7 @@ bool QgsAdvancedDigitizingFloater::active()
 {
 	return mActive;
 }
+
 void QgsAdvancedDigitizingFloater::setActive(bool active)
 {
 	mActive = active;
@@ -102,8 +107,7 @@ void QgsAdvancedDigitizingFloater::setActive(bool active)
 
 void QgsAdvancedDigitizingFloater::updatePos(QPoint pos)
 {
-	//QPoint newPos = mMapCanvas->mapToGlobal(pos) + QPoint(10, -10);
-	//move(newPos);
+  // We hardcode a small delta between the mouse position and the widget's position
 	move(pos + QPoint(15,5));
 }
 
@@ -196,7 +200,7 @@ void QgsAdvancedDigitizingFloater::focusOnAngle()
 	if (mActive) {
 		mAngleLineEdit->setFocus();
     mAngleLineEdit->selectAll();
-}
+  }
 }
 
 
