@@ -145,16 +145,16 @@ QgsAdvancedDigitizingDockWidget::QgsAdvancedDigitizingDockWidget( QgsMapCanvas *
   mRepeatingLockYButton->setToolTip( "<b>" + tr( "Continuously lock y coordinate" ) + "</b>" );
 
   // Create the slots/signals
-  connect(mXLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueXChanged);
-  connect(mYLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueYChanged);
-  connect(mDistanceLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueDistanceChanged);
-  connect(mAngleLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueAngleChanged);
+  connect( mXLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueXChanged );
+  connect( mYLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueYChanged );
+  connect( mDistanceLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueDistanceChanged );
+  connect( mAngleLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueAngleChanged );
 
 
   // Create the floater
-  mFloater = new QgsAdvancedDigitizingFloater(canvas, this);
-  mToggleFloaterAction->setChecked(QgsSettings().value(QStringLiteral("/Cad/Floater"), false).toBool());
-  toggleFloater(QgsSettings().value(QStringLiteral("/Cad/Floater"), false).toBool());
+  mFloater = new QgsAdvancedDigitizingFloater( canvas, this );
+  mToggleFloaterAction->setChecked( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
+  toggleFloater( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
 
   updateCapacity( true );
   connect( QgsProject::instance(), &QgsProject::snappingConfigChanged, this, [ = ] { updateCapacity( true ); } );
@@ -172,20 +172,24 @@ void QgsAdvancedDigitizingDockWidget::hideEvent( QHideEvent * )
 }
 
 
-void QgsAdvancedDigitizingDockWidget::setX(QString value){
-  mXLineEdit->setText(value);
+void QgsAdvancedDigitizingDockWidget::setX( QString value )
+{
+  mXLineEdit->setText( value );
   mXLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setY(QString value){
-  mYLineEdit->setText(value);
+void QgsAdvancedDigitizingDockWidget::setY( QString value )
+{
+  mYLineEdit->setText( value );
   mYLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setAngle(QString value){
-  mAngleLineEdit->setText(value);
+void QgsAdvancedDigitizingDockWidget::setAngle( QString value )
+{
+  mAngleLineEdit->setText( value );
   mAngleLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setDistance(QString value){
-  mDistanceLineEdit->setText(value);
+void QgsAdvancedDigitizingDockWidget::setDistance( QString value )
+{
+  mDistanceLineEdit->setText( value );
   mDistanceLineEdit->returnPressed();
 }
 
@@ -272,7 +276,7 @@ void QgsAdvancedDigitizingDockWidget::setConstraintRepeatingLock( bool activate 
 
 void QgsAdvancedDigitizingDockWidget::toggleFloater( bool enabled )
 {
-  mFloater->setActive(enabled);
+  mFloater->setActive( enabled );
   mToggleFloaterAction->setChecked( enabled );
   QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), enabled );
 }
@@ -306,22 +310,22 @@ void QgsAdvancedDigitizingDockWidget::releaseLocks( bool releaseRepeatingLocks )
   if ( releaseRepeatingLocks || !mAngleConstraint->isRepeatingLock() )
   {
     mAngleConstraint->setLockMode( CadConstraint::NoLock );
-	emit lockAngleChanged(false);
+    emit lockAngleChanged( false );
   }
   if ( releaseRepeatingLocks || !mDistanceConstraint->isRepeatingLock() )
   {
     mDistanceConstraint->setLockMode( CadConstraint::NoLock );
-	emit lockDistanceChanged(false);
+    emit lockDistanceChanged( false );
   }
   if ( releaseRepeatingLocks || !mXConstraint->isRepeatingLock() )
   {
     mXConstraint->setLockMode( CadConstraint::NoLock );
-	emit lockXChanged(false);
+    emit lockXChanged( false );
   }
   if ( releaseRepeatingLocks || !mYConstraint->isRepeatingLock() )
   {
     mYConstraint->setLockMode( CadConstraint::NoLock );
-	emit lockYChanged(false);
+    emit lockYChanged( false );
   }
 }
 
@@ -430,17 +434,21 @@ void QgsAdvancedDigitizingDockWidget::lockConstraint( bool activate /* default t
   }
   constraint->setLockMode( activate ? CadConstraint::HardLock : CadConstraint::NoLock );
 
-  if( constraint == mXConstraint.get() ){
-	emit lockXChanged(activate);
+  if ( constraint == mXConstraint.get() )
+  {
+    emit lockXChanged( activate );
   }
-  else if( constraint == mYConstraint.get() ){
-	  emit lockYChanged(activate);
+  else if ( constraint == mYConstraint.get() )
+  {
+    emit lockYChanged( activate );
   }
-  else if( constraint == mDistanceConstraint.get() ){
-	  emit lockDistanceChanged(activate);
+  else if ( constraint == mDistanceConstraint.get() )
+  {
+    emit lockDistanceChanged( activate );
   }
-  else if( constraint == mAngleConstraint.get() ){
-	  emit lockAngleChanged(activate);
+  else if ( constraint == mAngleConstraint.get() )
+  {
+    emit lockAngleChanged( activate );
   }
 
   if ( activate )
@@ -540,7 +548,7 @@ void QgsAdvancedDigitizingDockWidget::updateCapacity( bool updateUIwithoutChange
   mLockAngleButton->setEnabled( absoluteAngle );
   mRelativeAngleButton->setEnabled( relativeAngle );
   mAngleLineEdit->setEnabled( absoluteAngle );
-  emit enabledChangedAngle(absoluteAngle);
+  emit enabledChangedAngle( absoluteAngle );
   if ( !absoluteAngle )
   {
     mAngleConstraint->setLockMode( CadConstraint::NoLock );
@@ -558,7 +566,7 @@ void QgsAdvancedDigitizingDockWidget::updateCapacity( bool updateUIwithoutChange
   // distance is always relative
   mLockDistanceButton->setEnabled( relativeCoordinates );
   mDistanceLineEdit->setEnabled( relativeCoordinates );
-  emit enabledChangedDistance(relativeCoordinates);
+  emit enabledChangedDistance( relativeCoordinates );
   if ( !relativeCoordinates )
   {
     mDistanceConstraint->setLockMode( CadConstraint::NoLock );
@@ -895,7 +903,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       if ( type == QEvent::ShortcutOverride && ( e->modifiers() == Qt::AltModifier || e->modifiers() == Qt::ControlModifier ) )
       {
         mXConstraint->toggleLocked();
-		emit lockXChanged(mXConstraint->isLocked());
+        emit lockXChanged( mXConstraint->isLocked() );
         emit pointChanged( mCadPointList.value( 0 ) );
         e->accept();
       }
@@ -924,7 +932,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       if ( type == QEvent::ShortcutOverride && ( e->modifiers() == Qt::AltModifier || e->modifiers() == Qt::ControlModifier ) )
       {
         mYConstraint->toggleLocked();
-		emit lockYChanged(mYConstraint->isLocked());
+        emit lockYChanged( mYConstraint->isLocked() );
         emit pointChanged( mCadPointList.value( 0 ) );
         e->accept();
       }
@@ -955,7 +963,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
         if ( mCapacities.testFlag( AbsoluteAngle ) )
         {
           mAngleConstraint->toggleLocked();
-		  emit lockAngleChanged(mAngleConstraint->isLocked());
+          emit lockAngleChanged( mAngleConstraint->isLocked() );
           emit pointChanged( mCadPointList.value( 0 ) );
           e->accept();
         }
@@ -987,7 +995,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
         if ( mCapacities.testFlag( RelativeCoordinates ) )
         {
           mDistanceConstraint->toggleLocked();
-		  emit lockDistanceChanged(mDistanceConstraint->isLocked());
+          emit lockDistanceChanged( mDistanceConstraint->isLocked() );
           emit pointChanged( mCadPointList.value( 0 ) );
           e->accept();
         }

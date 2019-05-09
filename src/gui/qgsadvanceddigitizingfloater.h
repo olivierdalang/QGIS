@@ -39,7 +39,7 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
 
   public:
 
-    explicit QgsAdvancedDigitizingFloater(QgsMapCanvas *canvas, QgsAdvancedDigitizingDockWidget *cadDockWidget);
+    explicit QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas, QgsAdvancedDigitizingDockWidget *cadDockWidget );
 
     /**
     * Whether the floater is active or not.
@@ -48,55 +48,56 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     bool active();
 
   public slots:
-	  /**
-	  * Set whether the floater should be active or not.
+
+    /**
+    * Set whether the floater should be active or not.
     * Note that the floater may be active but not visible (e.g. if the mouse is not over the canvas).
-	  *
-	  * \param active
-	  */
-    void setActive(bool active);
+    *
+    * \param active
+    */
+    void setActive( bool active );
 
-private slots:
+  private slots:
 
-	void changeX(QString text);
-	void changeY(QString text);
-	void changeDistance(QString text);
-	void changeAngle(QString text);
-	void changeLockX(bool locked);
-	void changeLockY(bool locked);
-	void changeLockDistance(bool locked);
-	void changeLockAngle(bool locked);
-	void focusOnX();
-	void focusOnY();
-	void focusOnAngle();
-	void focusOnDistance();
-	void enabledChangedX(bool enabled);
-	void enabledChangedY(bool enabled);
-	void enabledChangedAngle(bool enabled);
-	void enabledChangedDistance(bool enabled);
+    void changeX( QString text );
+    void changeY( QString text );
+    void changeDistance( QString text );
+    void changeAngle( QString text );
+    void changeLockX( bool locked );
+    void changeLockY( bool locked );
+    void changeLockDistance( bool locked );
+    void changeLockAngle( bool locked );
+    void focusOnX();
+    void focusOnY();
+    void focusOnAngle();
+    void focusOnDistance();
+    void enabledChangedX( bool enabled );
+    void enabledChangedY( bool enabled );
+    void enabledChangedAngle( bool enabled );
+    void enabledChangedDistance( bool enabled );
 
   private:
 
-	  //! pointer to map canvas
-	  QgsMapCanvas *mMapCanvas = nullptr;
+    //! pointer to map canvas
+    QgsMapCanvas *mMapCanvas = nullptr;
 
-	  //! pointer to map cad docker widget
-	  QgsAdvancedDigitizingDockWidget *mCadDockWidget = nullptr;
+    //! pointer to map cad docker widget
+    QgsAdvancedDigitizingDockWidget *mCadDockWidget = nullptr;
 
-	/**
-	* event filter to track mouse position
-	* \note defined as private in Python bindings
-	*/
-	bool eventFilter(QObject *obj, QEvent *event) override SIP_SKIP;
+    /**
+    * event filter to track mouse position
+    * \note defined as private in Python bindings
+    */
+    bool eventFilter( QObject *obj, QEvent *event ) override SIP_SKIP;
 
-	/**
-	* move the widget
-    * \param pos position of the cursor
-	*/
-	void updatePos(QPoint pos);
+    /**
+    * move the widget
+      * \param pos position of the cursor
+    */
+    void updatePos( QPoint pos );
 
-	//! Whether the floater is enabled.
-	bool mActive = false;
+    //! Whether the floater is enabled.
+    bool mActive = false;
 
 };
 
