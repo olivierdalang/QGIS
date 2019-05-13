@@ -102,6 +102,11 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     */
     void updatePos( const QPoint &pos );
 
+    /**
+    * Hides the widget if either the floater or the cadDockWidget is disabled.
+    */
+    void hideIfDisabled();
+
     //! Whether the floater is enabled.
     bool mActive = false;
 

@@ -31,6 +31,8 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
 
   setActive( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
 
+  hideIfDisabled();
+
   // This is required to be able to track mouse move events
   mMapCanvas->viewport()->installEventFilter( this );
   mMapCanvas->viewport()->setMouseTracking( true );
@@ -42,6 +44,8 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
   mYLineEdit->installEventFilter( cadDockWidget );
 
   // Connect all cadDockWidget's signals to update the widget's display
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::cadEnabledChanged, this, &QgsAdvancedDigitizingFloater::hideIfDisabled );
+
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueXChanged, this, &QgsAdvancedDigitizingFloater::changeX );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueYChanged, this, &QgsAdvancedDigitizingFloater::changeY );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::valueAngleChanged, this, &QgsAdvancedDigitizingFloater::changeAngle );
@@ -110,16 +114,22 @@ void QgsAdvancedDigitizingFloater::setActive( bool active )
   QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), mActive );
 
   mActive = active;
-  if ( !active )
-  {
-    setVisible( false );
-  }
+
+  hideIfDisabled();
 }
 
 void QgsAdvancedDigitizingFloater::updatePos( const QPoint &pos )
 {
   // We hardcode a small delta between the mouse position and the widget's position
   move( pos + QPoint( 15, 5 ) );
+}
+
+void QgsAdvancedDigitizingFloater::hideIfDisabled()
+{
+  if ( ! mCadDockWidget->cadEnabled() || ! mActive )
+  {
+    setVisible( false );
+  }
 }
 
 void QgsAdvancedDigitizingFloater::changeX( const QString &text )

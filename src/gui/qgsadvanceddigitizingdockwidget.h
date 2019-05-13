@@ -368,6 +368,14 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     //! Signals for external widgets that need to update according to current values
 
     /**
+    * Emitted whenever CAD is enabled or disabled
+    *
+    * \param enabled Whether CAD is enabled or not.
+    * \since QGIS 3.8
+    */
+    void cadEnabledChanged( bool enabled );
+
+    /**
     * Emitted whenever the X \a value changes (either the mouse moved, or the user changed the input).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     * \since QGIS 3.8
