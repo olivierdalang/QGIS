@@ -373,71 +373,168 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     //! Signals for external widgets that need to update according to current values
 
     /**
-    * Emitted whenever the value changes (either the mouse moved, or the user changed the input).
+    * Emitted whenever the X \a value changes (either the mouse moved, or the user changed the input).
     * Could be used by widgets that must reflect the current advanced digitizing state.
-    *
-    * \param value The current value (as a QString, as it could be an expression).
     */
     void valueXChanged( QString value );
+
+    /**
+    * Emitted whenever the Y \a value changes (either the mouse moved, or the user changed the input).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void valueYChanged( QString value );
+
+    /**
+    * Emitted whenever the angle \a value changes (either the mouse moved, or the user changed the input).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void valueAngleChanged( QString value );
+
+    /**
+    * Emitted whenever the distance \a value changes (either the mouse moved, or the user changed the input).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void valueDistanceChanged( QString value );
 
     /**
-    * Emitted whenever the parameter is locked.
+    * Emitted whenever the X parameter is \a locked.
     * Could be used by widgets that must reflect the current advanced digitizing state.
-    *
-    * \param locked Whether the parameter is locked or not.
     */
     void lockXChanged( bool locked );
+
+    /**
+    * Emitted whenever the Y parameter is \a locked.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void lockYChanged( bool locked );
+
+    /**
+    * Emitted whenever the angle parameter is \a locked.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void lockAngleChanged( bool locked );
+
+    /**
+    * Emitted whenever the distance parameter is \a locked.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    */
     void lockDistanceChanged( bool locked );
 
     /**
-    * Emitted whenever the parameter is toggled between absolute and relative.
+    * Emitted whenever the X parameter is toggled between absolute and relative.
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
-    * \param relative Whether the parameter is relative or not.
+    * \param relative Whether the X parameter is relative or not.
     */
     void relativeXChanged( bool relative );
-    void relativeYChanged( bool relative );
-    void relativeAngleChanged( bool relative );
-    // void relativeDistanceChanged( bool relative ); // distance is always relative
 
     /**
-    * Emitted whenever the field is enabled or disabled. Depending on the context, some parameters
+    * Emitted whenever the Y parameter is toggled between absolute and relative.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param relative Whether the Y parameter is relative or not.
+    */
+    void relativeYChanged( bool relative );
+
+    /**
+    * Emitted whenever the angleX parameter is toggled between absolute and relative.
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param relative Whether the angle parameter is relative or not.
+    */
+    void relativeAngleChanged( bool relative );
+
+    // relativeDistanceChanged doesn't exist as distance is always relative
+
+    /**
+    * Emitted whenever the X field is enabled or disabled. Depending on the context, some parameters
     * dont make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
-    * \param enabled Whether the parameter is enabled or not.
+    * \param enabled Whether the X parameter is enabled or not.
     */
     void enabledChangedX( bool enabled );
+
+    /**
+    * Emitted whenever the Y field is enabled or disabled. Depending on the context, some parameters
+    * dont make sense (e.g. you need a previous point to define a distance).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param enabled Whether the Y parameter is enabled or not.
+    */
     void enabledChangedY( bool enabled );
+
+    /**
+    * Emitted whenever the angle field is enabled or disabled. Depending on the context, some parameters
+    * dont make sense (e.g. you need a previous point to define a distance).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param enabled Whether the angle parameter is enabled or not.
+    */
     void enabledChangedAngle( bool enabled );
+
+    /**
+    * Emitted whenever the distance field is enabled or disabled. Depending on the context, some parameters
+    * dont make sense (e.g. you need a previous point to define a distance).
+    * Could be used by widgets that must reflect the current advanced digitizing state.
+    *
+    * \param enabled Whether the distance parameter is enabled or not.
+    */
     void enabledChangedDistance( bool enabled );
 
     /**
-    * Emitted whenever the field should get the focus using the shortcuts (X, Y, A, D).
+    * Emitted whenever the X field should get the focus using the shortcuts (X).
     * Could be used by widgets to capture the focus when a field is being edited.
     */
     void focusOnX();
+
+    /**
+    * Emitted whenever the Y field should get the focus using the shortcuts (Y).
+    * Could be used by widgets to capture the focus when a field is being edited.
+    */
     void focusOnY();
+
+    /**
+    * Emitted whenever the angle field should get the focus using the shortcuts (A).
+    * Could be used by widgets to capture the focus when a field is being edited.
+    */
     void focusOnAngle();
+
+    /**
+    * Emitted whenever the distance field should get the focus using the shortcuts (D).
+    * Could be used by widgets to capture the focus when a field is being edited.
+    */
     void focusOnDistance();
 
 
   public slots:
 
     /**
-    * Set and lock the parameter.
+    * Set and lock the X \a value.
     * Can be used to set constraints.
-    *
-    * \param value The current value (as a QString, as it could be an expression).
+    * \note The value is a QString, as it could be an expression.
     */
     void setX( QString value );
+
+    /**
+    * Set and lock the Y \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    */
     void setY( QString value );
+
+    /**
+    * Set and lock the angle \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    */
     void setAngle( QString value );
+
+    /**
+    * Set and lock the distance \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    */
     void setDistance( QString value );
 
 
