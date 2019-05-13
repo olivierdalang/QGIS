@@ -146,13 +146,13 @@ void QgsAdvancedDigitizingFloater::changeLockX( bool locked )
 {
   if ( !locked )
   {
-    mXLineEdit->setStyleSheet( "" );
-    mXLabel->setStyleSheet( "" );
+    mXLineEdit->setStyleSheet( QString() );
+    mXLabel->setStyleSheet( QString() );
   }
   else
   {
-    mXLineEdit->setStyleSheet( "font-weight: bold" );
-    mXLabel->setStyleSheet( "font-weight: bold" );
+    mXLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mXLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
   }
 }
 
@@ -160,13 +160,13 @@ void QgsAdvancedDigitizingFloater::changeLockY( bool locked )
 {
   if ( !locked )
   {
-    mYLineEdit->setStyleSheet( "" );
-    mYLabel->setStyleSheet( "" );
+    mYLineEdit->setStyleSheet( QString() );
+    mYLabel->setStyleSheet( QString() );
   }
   else
   {
-    mYLineEdit->setStyleSheet( "font-weight: bold" );
-    mYLabel->setStyleSheet( "font-weight: bold" );
+    mYLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mYLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
   }
 }
 
@@ -174,13 +174,13 @@ void QgsAdvancedDigitizingFloater::changeLockDistance( bool locked )
 {
   if ( !locked )
   {
-    mDistanceLineEdit->setStyleSheet( "" );
-    mDistanceLabel->setStyleSheet( "" );
+    mDistanceLineEdit->setStyleSheet( QString() );
+    mDistanceLabel->setStyleSheet( QString() );
   }
   else
   {
-    mDistanceLineEdit->setStyleSheet( "font-weight: bold" );
-    mDistanceLabel->setStyleSheet( "font-weight: bold" );
+    mDistanceLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mDistanceLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
   }
 }
 
@@ -188,13 +188,13 @@ void QgsAdvancedDigitizingFloater::changeLockAngle( bool locked )
 {
   if ( !locked )
   {
-    mAngleLineEdit->setStyleSheet( "" );
-    mAngleLabel->setStyleSheet( "" );
+    mAngleLineEdit->setStyleSheet( QString() );
+    mAngleLabel->setStyleSheet( QString() );
   }
   else
   {
-    mAngleLineEdit->setStyleSheet( "font-weight: bold" );
-    mAngleLabel->setStyleSheet( "font-weight: bold" );
+    mAngleLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mAngleLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
   }
 }
 
