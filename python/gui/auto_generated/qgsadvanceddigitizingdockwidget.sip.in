@@ -332,7 +332,7 @@ Updates canvas item that displays constraints on the ma
 .. versionadded:: 3.0
 %End
 
-    void setX( QString value );
+    void setX( const QString &value );
 %Docstring
 Set and lock the X ``value``.
 Can be used to set constraints.
@@ -344,7 +344,7 @@ Can be used to set constraints.
 .. versionadded:: 3.8
 %End
 
-    void setY( QString value );
+    void setY( const QString &value );
 %Docstring
 Set and lock the Y ``value``.
 Can be used to set constraints.
@@ -356,7 +356,7 @@ Can be used to set constraints.
 .. versionadded:: 3.8
 %End
 
-    void setAngle( QString value );
+    void setAngle( const QString &value );
 %Docstring
 Set and lock the angle ``value``.
 Can be used to set constraints.
@@ -368,7 +368,7 @@ Can be used to set constraints.
 .. versionadded:: 3.8
 %End
 
-    void setDistance( QString value );
+    void setDistance( const QString &value );
 %Docstring
 Set and lock the distance ``value``.
 Can be used to set constraints.
@@ -412,7 +412,7 @@ Emitted whenever CAD is enabled or disabled
 .. versionadded:: 3.8
 %End
 
-    void valueXChanged( QString value );
+    void valueXChanged( const QString &value );
 %Docstring
 Emitted whenever the X ``value`` changes (either the mouse moved, or the user changed the input).
 Could be used by widgets that must reflect the current advanced digitizing state.
@@ -420,7 +420,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
 .. versionadded:: 3.8
 %End
 
-    void valueYChanged( QString value );
+    void valueYChanged( const QString &value );
 %Docstring
 Emitted whenever the Y ``value`` changes (either the mouse moved, or the user changed the input).
 Could be used by widgets that must reflect the current advanced digitizing state.
@@ -428,7 +428,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
 .. versionadded:: 3.8
 %End
 
-    void valueAngleChanged( QString value );
+    void valueAngleChanged( const QString &value );
 %Docstring
 Emitted whenever the angle ``value`` changes (either the mouse moved, or the user changed the input).
 Could be used by widgets that must reflect the current advanced digitizing state.
@@ -436,7 +436,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
 .. versionadded:: 3.8
 %End
 
-    void valueDistanceChanged( QString value );
+    void valueDistanceChanged( const QString &value );
 %Docstring
 Emitted whenever the distance ``value`` changes (either the mouse moved, or the user changed the input).
 Could be used by widgets that must reflect the current advanced digitizing state.
@@ -508,7 +508,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
     void enabledChangedX( bool enabled );
 %Docstring
 Emitted whenever the X field is enabled or disabled. Depending on the context, some parameters
-dont make sense (e.g. you need a previous point to define a distance).
+do not make sense (e.g. you need a previous point to define a distance).
 Could be used by widgets that must reflect the current advanced digitizing state.
 
 :param enabled: Whether the X parameter is enabled or not.
@@ -519,7 +519,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
     void enabledChangedY( bool enabled );
 %Docstring
 Emitted whenever the Y field is enabled or disabled. Depending on the context, some parameters
-dont make sense (e.g. you need a previous point to define a distance).
+do not make sense (e.g. you need a previous point to define a distance).
 Could be used by widgets that must reflect the current advanced digitizing state.
 
 :param enabled: Whether the Y parameter is enabled or not.
@@ -530,7 +530,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
     void enabledChangedAngle( bool enabled );
 %Docstring
 Emitted whenever the angle field is enabled or disabled. Depending on the context, some parameters
-dont make sense (e.g. you need a previous point to define a distance).
+do not make sense (e.g. you need a previous point to define a distance).
 Could be used by widgets that must reflect the current advanced digitizing state.
 
 :param enabled: Whether the angle parameter is enabled or not.
@@ -541,7 +541,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
     void enabledChangedDistance( bool enabled );
 %Docstring
 Emitted whenever the distance field is enabled or disabled. Depending on the context, some parameters
-dont make sense (e.g. you need a previous point to define a distance).
+do not make sense (e.g. you need a previous point to define a distance).
 Could be used by widgets that must reflect the current advanced digitizing state.
 
 :param enabled: Whether the distance parameter is enabled or not.
