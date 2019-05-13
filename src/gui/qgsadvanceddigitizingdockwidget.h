@@ -202,11 +202,6 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     explicit QgsAdvancedDigitizingDockWidget( QgsMapCanvas *canvas, QWidget *parent = nullptr );
 
     /**
-     * Disables the CAD tools when hiding the dock
-     */
-    void hideEvent( QHideEvent * ) override;
-
-    /**
      * Filter key events to e.g. toggle construction mode or adapt constraints
      *
      * \param e A mouse event (may be modified)

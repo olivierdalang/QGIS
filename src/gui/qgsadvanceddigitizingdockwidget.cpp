@@ -160,16 +160,6 @@ QgsAdvancedDigitizingDockWidget::QgsAdvancedDigitizingDockWidget( QgsMapCanvas *
   disable();
 }
 
-
-void QgsAdvancedDigitizingDockWidget::hideEvent( QHideEvent * )
-{
-  // disable CAD but do not unset map event filter
-  // so it will be reactivated whenever the map tool is show again
-  // TODO : remove this (we don't want to disable CAD events, even when the dockerwidget is hidden)
-  // setCadEnabled( false );
-}
-
-
 void QgsAdvancedDigitizingDockWidget::setX( QString value )
 {
   mXLineEdit->setText( value );
