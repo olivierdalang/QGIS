@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>128</width>
-    <height>77</height>
+    <width>150</width>
+    <height>120</height>
    </rect>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -27,7 +27,7 @@
     <number>6</number>
    </property>
    <property name="verticalSpacing">
-    <number>2</number>
+    <number>0</number>
    </property>
    <item row="3" column="1">
     <widget class="QLabel" name="mAngleLabel">
@@ -38,17 +38,6 @@
    </item>
    <item row="2" column="3">
     <widget class="QLineEdit" name="mDistanceLineEdit">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>14</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -71,17 +60,6 @@
        <height>0</height>
       </size>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>14</height>
-      </size>
-     </property>
      <property name="toolTip">
       <string/>
      </property>
@@ -99,17 +77,6 @@
       <size>
        <width>40</width>
        <height>0</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>14</height>
       </size>
      </property>
      <property name="toolTip">
@@ -143,17 +110,6 @@
       <size>
        <width>40</width>
        <height>0</height>
-      </size>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>14</height>
       </size>
      </property>
      <property name="toolTip">
