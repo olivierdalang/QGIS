@@ -44,6 +44,7 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     /**
     * Whether the floater is active or not.
     * Note that the floater may be active but not visible (e.g. if the mouse is not over the canvas).
+    * \since QGIS 3.8
     */
     bool active();
 
@@ -52,6 +53,7 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     /**
     * Set whether the floater should be active or not.
     * Note that the floater may be active but not visible (e.g. if the mouse is not over the canvas).
+    * \since QGIS 3.8
     *
     * \param active
     */
