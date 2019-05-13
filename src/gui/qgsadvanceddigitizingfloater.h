@@ -59,10 +59,10 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
 
   private slots:
 
-    void changeX( QString text );
-    void changeY( QString text );
-    void changeDistance( QString text );
-    void changeAngle( QString text );
+    void changeX( const QString &text );
+    void changeY( const QString &text );
+    void changeDistance( const QString &text );
+    void changeAngle( const QString &text );
     void changeLockX( bool locked );
     void changeLockY( bool locked );
     void changeLockDistance( bool locked );
@@ -98,7 +98,7 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     * Move the widget to a new cursor position. A hard-coded offet will be added.
     * \param pos position of the cursor
     */
-    void updatePos( QPoint pos );
+    void updatePos( const QPoint &pos );
 
     //! Whether the floater is enabled.
     bool mActive = false;

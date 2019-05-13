@@ -112,28 +112,28 @@ void QgsAdvancedDigitizingFloater::setActive( bool active )
   }
 }
 
-void QgsAdvancedDigitizingFloater::updatePos( QPoint pos )
+void QgsAdvancedDigitizingFloater::updatePos( const QPoint &pos )
 {
   // We hardcode a small delta between the mouse position and the widget's position
   move( pos + QPoint( 15, 5 ) );
 }
 
-void QgsAdvancedDigitizingFloater::changeX( QString text )
+void QgsAdvancedDigitizingFloater::changeX( const QString &text )
 {
   mXLineEdit->setText( text );
 }
 
-void QgsAdvancedDigitizingFloater::changeY( QString text )
+void QgsAdvancedDigitizingFloater::changeY( const QString &text )
 {
   mYLineEdit->setText( text );
 }
 
-void QgsAdvancedDigitizingFloater::changeDistance( QString text )
+void QgsAdvancedDigitizingFloater::changeDistance( const QString &text )
 {
   mDistanceLineEdit->setText( text );
 }
 
-void QgsAdvancedDigitizingFloater::changeAngle( QString text )
+void QgsAdvancedDigitizingFloater::changeAngle( const QString &text )
 {
   mAngleLineEdit->setText( text );
 }
