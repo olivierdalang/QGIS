@@ -493,7 +493,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
 
     /**
     * Emitted whenever the X field is enabled or disabled. Depending on the context, some parameters
-    * dont make sense (e.g. you need a previous point to define a distance).
+    * do not make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
     * \param enabled Whether the X parameter is enabled or not.
@@ -503,7 +503,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
 
     /**
     * Emitted whenever the Y field is enabled or disabled. Depending on the context, some parameters
-    * dont make sense (e.g. you need a previous point to define a distance).
+    * do not make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
     * \param enabled Whether the Y parameter is enabled or not.
@@ -513,7 +513,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
 
     /**
     * Emitted whenever the angle field is enabled or disabled. Depending on the context, some parameters
-    * dont make sense (e.g. you need a previous point to define a distance).
+    * do not make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
     * \param enabled Whether the angle parameter is enabled or not.
@@ -523,7 +523,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
 
     /**
     * Emitted whenever the distance field is enabled or disabled. Depending on the context, some parameters
-    * dont make sense (e.g. you need a previous point to define a distance).
+    * do not make sense (e.g. you need a previous point to define a distance).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     *
     * \param enabled Whether the distance parameter is enabled or not.
