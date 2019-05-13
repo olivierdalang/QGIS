@@ -111,7 +111,7 @@ bool QgsAdvancedDigitizingFloater::active()
 
 void QgsAdvancedDigitizingFloater::setActive( bool active )
 {
-  QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), mActive );
+  QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), active );
 
   mActive = active;
 
