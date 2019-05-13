@@ -196,7 +196,7 @@ void QgsAdvancedDigitizingDockWidget::setCadEnabled( bool enabled )
   clear();
   setConstructionMode( false );
 
-  emit cadEnabledChanged(enabled);
+  emit cadEnabledChanged( enabled );
 }
 
 void QgsAdvancedDigitizingDockWidget::activateCad( bool enabled )

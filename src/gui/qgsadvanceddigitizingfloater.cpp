@@ -161,8 +161,8 @@ void QgsAdvancedDigitizingFloater::changeLockX( bool locked )
   }
   else
   {
-    mXLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
-    mXLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mXLineEdit->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
+    mXLabel->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
   }
 }
 
@@ -175,8 +175,8 @@ void QgsAdvancedDigitizingFloater::changeLockY( bool locked )
   }
   else
   {
-    mYLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
-    mYLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mYLineEdit->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
+    mYLabel->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
   }
 }
 
@@ -189,8 +189,8 @@ void QgsAdvancedDigitizingFloater::changeLockDistance( bool locked )
   }
   else
   {
-    mDistanceLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
-    mDistanceLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mDistanceLineEdit->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
+    mDistanceLabel->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
   }
 }
 
@@ -203,8 +203,8 @@ void QgsAdvancedDigitizingFloater::changeLockAngle( bool locked )
   }
   else
   {
-    mAngleLineEdit->setStyleSheet( QStringLiteral("font-weight: bold") );
-    mAngleLabel->setStyleSheet( QStringLiteral("font-weight: bold") );
+    mAngleLineEdit->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
+    mAngleLabel->setStyleSheet( QStringLiteral( "font-weight: bold" ) );
   }
 }
 
