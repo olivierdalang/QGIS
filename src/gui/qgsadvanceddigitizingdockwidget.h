@@ -343,6 +343,38 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
      */
     void updateCadPaintItem();
 
+    /**
+    * Set and lock the X \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    * \since QGIS 3.8
+    */
+    void setX( QString value );
+
+    /**
+    * Set and lock the Y \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    * \since QGIS 3.8
+    */
+    void setY( QString value );
+
+    /**
+    * Set and lock the angle \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    * \since QGIS 3.8
+    */
+    void setAngle( QString value );
+
+    /**
+    * Set and lock the distance \a value.
+    * Can be used to set constraints.
+    * \note The value is a QString, as it could be an expression.
+    * \since QGIS 3.8
+    */
+    void setDistance( QString value );
+
   signals:
 
     /**
@@ -526,41 +558,6 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * \since QGIS 3.8
     */
     void focusOnDistance();
-
-
-  public slots:
-
-    /**
-    * Set and lock the X \a value.
-    * Can be used to set constraints.
-    * \note The value is a QString, as it could be an expression.
-    * \since QGIS 3.8
-    */
-    void setX( QString value );
-
-    /**
-    * Set and lock the Y \a value.
-    * Can be used to set constraints.
-    * \note The value is a QString, as it could be an expression.
-    * \since QGIS 3.8
-    */
-    void setY( QString value );
-
-    /**
-    * Set and lock the angle \a value.
-    * Can be used to set constraints.
-    * \note The value is a QString, as it could be an expression.
-    * \since QGIS 3.8
-    */
-    void setAngle( QString value );
-
-    /**
-    * Set and lock the distance \a value.
-    * Can be used to set constraints.
-    * \note The value is a QString, as it could be an expression.
-    * \since QGIS 3.8
-    */
-    void setDistance( QString value );
 
 
   private slots:
