@@ -472,9 +472,6 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
      */
     void activateCad( bool enabled );
 
-    //! enable/disable floater
-    void toggleFloater( bool enabled );
-
     //! enable/disable construction mode (events are not forwarded to the map tool)
     void setConstructionMode( bool enabled );
 

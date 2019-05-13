@@ -61,7 +61,6 @@ QgsAdvancedDigitizingDockWidget::QgsAdvancedDigitizingDockWidget( QgsMapCanvas *
   // Connect the UI to the event filter to update constraints
   connect( mEnableAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::activateCad );
   connect( mConstructionModeAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::setConstructionMode );
-  connect( mToggleFloaterAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::toggleFloater );
   connect( mParallelAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::additionalConstraintClicked );
   connect( mPerpendicularAction, &QAction::triggered, this, &QgsAdvancedDigitizingDockWidget::additionalConstraintClicked );
   connect( mLockAngleButton, &QAbstractButton::clicked, this, &QgsAdvancedDigitizingDockWidget::lockConstraint );
@@ -150,11 +149,10 @@ QgsAdvancedDigitizingDockWidget::QgsAdvancedDigitizingDockWidget( QgsMapCanvas *
   connect( mDistanceLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueDistanceChanged );
   connect( mAngleLineEdit, &QLineEdit::textChanged, this, &QgsAdvancedDigitizingDockWidget::valueAngleChanged );
 
-
   // Create the floater
   mFloater = new QgsAdvancedDigitizingFloater( canvas, this );
-  mToggleFloaterAction->setChecked( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
-  toggleFloater( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
+  connect( mToggleFloaterAction, &QAction::triggered, mFloater, &QgsAdvancedDigitizingFloater::setActive );
+  mToggleFloaterAction->setChecked( mFloater->active() );
 
   updateCapacity( true );
   connect( QgsProject::instance(), &QgsProject::snappingConfigChanged, this, [ = ] { updateCapacity( true ); } );
@@ -277,14 +275,6 @@ void QgsAdvancedDigitizingDockWidget::setConstraintRepeatingLock( bool activate 
     mYConstraint->setRepeatingLock( activate );
   }
 }
-
-void QgsAdvancedDigitizingDockWidget::toggleFloater( bool enabled )
-{
-  mFloater->setActive( enabled );
-  mToggleFloaterAction->setChecked( enabled );
-  QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), enabled );
-}
-
 
 void QgsAdvancedDigitizingDockWidget::setConstructionMode( bool enabled )
 {

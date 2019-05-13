@@ -20,6 +20,7 @@
 #include "qgsadvanceddigitizingfloater.h"
 #include "qgsmessagelog.h"
 #include "qgsmapcanvas.h"
+#include "qgssettings.h"
 
 QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas, QgsAdvancedDigitizingDockWidget *cadDockWidget )
   : QWidget( canvas->viewport() ), mMapCanvas( canvas ), mCadDockWidget( cadDockWidget )
@@ -27,7 +28,8 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
   setupUi( this );
   setWindowFlag( Qt::FramelessWindowHint );
   setAttribute( Qt::WA_TransparentForMouseEvents );
-  setVisible( false );
+
+  setActive( QgsSettings().value( QStringLiteral( "/Cad/Floater" ), false ).toBool() );
 
   // This is required to be able to track mouse move events
   mMapCanvas->viewport()->installEventFilter( this );
@@ -105,6 +107,8 @@ bool QgsAdvancedDigitizingFloater::active()
 
 void QgsAdvancedDigitizingFloater::setActive( bool active )
 {
+  QgsSettings().setValue( QStringLiteral( "/Cad/Floater" ), mActive );
+
   mActive = active;
   if ( !active )
   {
