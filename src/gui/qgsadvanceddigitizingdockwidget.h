@@ -536,28 +536,28 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * Could be used by widgets to capture the focus when a field is being edited.
     * \since QGIS 3.8
     */
-    void focusOnX();
+    void focusOnXRequested();
 
     /**
     * Emitted whenever the Y field should get the focus using the shortcuts (Y).
     * Could be used by widgets to capture the focus when a field is being edited.
     * \since QGIS 3.8
     */
-    void focusOnY();
+    void focusOnYRequested();
 
     /**
     * Emitted whenever the angle field should get the focus using the shortcuts (A).
     * Could be used by widgets to capture the focus when a field is being edited.
     * \since QGIS 3.8
     */
-    void focusOnAngle();
+    void focusOnAngleRequested();
 
     /**
     * Emitted whenever the distance field should get the focus using the shortcuts (D).
     * Could be used by widgets to capture the focus when a field is being edited.
     * \since QGIS 3.8
     */
-    void focusOnDistance();
+    void focusOnDistanceRequested();
 
 
   private slots:

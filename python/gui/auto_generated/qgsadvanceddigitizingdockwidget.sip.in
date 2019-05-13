@@ -549,7 +549,7 @@ Could be used by widgets that must reflect the current advanced digitizing state
 .. versionadded:: 3.8
 %End
 
-    void focusOnX();
+    void focusOnXRequested();
 %Docstring
 Emitted whenever the X field should get the focus using the shortcuts (X).
 Could be used by widgets to capture the focus when a field is being edited.
@@ -557,7 +557,7 @@ Could be used by widgets to capture the focus when a field is being edited.
 .. versionadded:: 3.8
 %End
 
-    void focusOnY();
+    void focusOnYRequested();
 %Docstring
 Emitted whenever the Y field should get the focus using the shortcuts (Y).
 Could be used by widgets to capture the focus when a field is being edited.
@@ -565,7 +565,7 @@ Could be used by widgets to capture the focus when a field is being edited.
 .. versionadded:: 3.8
 %End
 
-    void focusOnAngle();
+    void focusOnAngleRequested();
 %Docstring
 Emitted whenever the angle field should get the focus using the shortcuts (A).
 Could be used by widgets to capture the focus when a field is being edited.
@@ -573,7 +573,7 @@ Could be used by widgets to capture the focus when a field is being edited.
 .. versionadded:: 3.8
 %End
 
-    void focusOnDistance();
+    void focusOnDistanceRequested();
 %Docstring
 Emitted whenever the distance field should get the focus using the shortcuts (D).
 Could be used by widgets to capture the focus when a field is being edited.

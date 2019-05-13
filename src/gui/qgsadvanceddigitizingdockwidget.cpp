@@ -910,7 +910,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       {
         mXLineEdit->setFocus();
         mXLineEdit->selectAll();
-        emit focusOnX();
+        emit focusOnXRequested();
         e->accept();
       }
       break;
@@ -940,7 +940,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       {
         mYLineEdit->setFocus();
         mYLineEdit->selectAll();
-        emit focusOnY();
+        emit focusOnYRequested();
         e->accept();
       }
       break;
@@ -973,7 +973,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       {
         mAngleLineEdit->setFocus();
         mAngleLineEdit->selectAll();
-        emit focusOnAngle();
+        emit focusOnAngleRequested();
         e->accept();
       }
       break;
@@ -996,7 +996,7 @@ bool QgsAdvancedDigitizingDockWidget::filterKeyPress( QKeyEvent *e )
       {
         mDistanceLineEdit->setFocus();
         mDistanceLineEdit->selectAll();
-        emit focusOnDistance();
+        emit focusOnDistanceRequested();
         e->accept();
       }
       break;

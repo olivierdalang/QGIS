@@ -61,10 +61,10 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::relativeAngleChanged, this, &QgsAdvancedDigitizingFloater::changeRelativeAngle );
   // distance is always relative
 
-  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnX, this, &QgsAdvancedDigitizingFloater::focusOnX );
-  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnY, this, &QgsAdvancedDigitizingFloater::focusOnY );
-  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnAngle, this, &QgsAdvancedDigitizingFloater::focusOnAngle );
-  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnDistance, this, &QgsAdvancedDigitizingFloater::focusOnDistance );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnXRequested, this, &QgsAdvancedDigitizingFloater::focusOnX );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnYRequested, this, &QgsAdvancedDigitizingFloater::focusOnY );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnAngleRequested, this, &QgsAdvancedDigitizingFloater::focusOnAngle );
+  connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::focusOnDistanceRequested, this, &QgsAdvancedDigitizingFloater::focusOnDistance );
 
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedX, this, &QgsAdvancedDigitizingFloater::enabledChangedX );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedY, this, &QgsAdvancedDigitizingFloater::enabledChangedY );
