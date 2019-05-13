@@ -95,8 +95,8 @@ class GUI_EXPORT QgsAdvancedDigitizingFloater : public QWidget, private Ui::QgsA
     bool eventFilter( QObject *obj, QEvent *event ) override SIP_SKIP;
 
     /**
-    * move the widget
-      * \param pos position of the cursor
+    * Move the widget to a new cursor position. A hard-coded offet will be added.
+    * \param pos position of the cursor
     */
     void updatePos( QPoint pos );
 
