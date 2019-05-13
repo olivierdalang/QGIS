@@ -349,7 +349,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * \note The value is a QString, as it could be an expression.
     * \since QGIS 3.8
     */
-    void setX( QString value );
+    void setX( const QString &value );
 
     /**
     * Set and lock the Y \a value.
@@ -357,7 +357,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * \note The value is a QString, as it could be an expression.
     * \since QGIS 3.8
     */
-    void setY( QString value );
+    void setY( const QString &value );
 
     /**
     * Set and lock the angle \a value.
@@ -365,7 +365,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * \note The value is a QString, as it could be an expression.
     * \since QGIS 3.8
     */
-    void setAngle( QString value );
+    void setAngle( const QString &value );
 
     /**
     * Set and lock the distance \a value.
@@ -373,7 +373,7 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * \note The value is a QString, as it could be an expression.
     * \since QGIS 3.8
     */
-    void setDistance( QString value );
+    void setDistance( const QString &value );
 
   signals:
 
@@ -412,28 +412,28 @@ class GUI_EXPORT QgsAdvancedDigitizingDockWidget : public QgsDockWidget, private
     * Could be used by widgets that must reflect the current advanced digitizing state.
     * \since QGIS 3.8
     */
-    void valueXChanged( QString value );
+    void valueXChanged( const QString &value );
 
     /**
     * Emitted whenever the Y \a value changes (either the mouse moved, or the user changed the input).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     * \since QGIS 3.8
     */
-    void valueYChanged( QString value );
+    void valueYChanged( const QString &value );
 
     /**
     * Emitted whenever the angle \a value changes (either the mouse moved, or the user changed the input).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     * \since QGIS 3.8
     */
-    void valueAngleChanged( QString value );
+    void valueAngleChanged( const QString &value );
 
     /**
     * Emitted whenever the distance \a value changes (either the mouse moved, or the user changed the input).
     * Could be used by widgets that must reflect the current advanced digitizing state.
     * \since QGIS 3.8
     */
-    void valueDistanceChanged( QString value );
+    void valueDistanceChanged( const QString &value );
 
     /**
     * Emitted whenever the X parameter is \a locked.

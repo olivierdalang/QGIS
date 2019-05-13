@@ -160,22 +160,22 @@ QgsAdvancedDigitizingDockWidget::QgsAdvancedDigitizingDockWidget( QgsMapCanvas *
   disable();
 }
 
-void QgsAdvancedDigitizingDockWidget::setX( QString value )
+void QgsAdvancedDigitizingDockWidget::setX( const QString &value )
 {
   mXLineEdit->setText( value );
   mXLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setY( QString value )
+void QgsAdvancedDigitizingDockWidget::setY( const QString &value )
 {
   mYLineEdit->setText( value );
   mYLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setAngle( QString value )
+void QgsAdvancedDigitizingDockWidget::setAngle( const QString &value )
 {
   mAngleLineEdit->setText( value );
   mAngleLineEdit->returnPressed();
 }
-void QgsAdvancedDigitizingDockWidget::setDistance( QString value )
+void QgsAdvancedDigitizingDockWidget::setDistance( const QString &value )
 {
   mDistanceLineEdit->setText( value );
   mDistanceLineEdit->returnPressed();
