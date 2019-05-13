@@ -71,7 +71,7 @@ QgsAdvancedDigitizingFloater::QgsAdvancedDigitizingFloater( QgsMapCanvas *canvas
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedAngle, this, &QgsAdvancedDigitizingFloater::enabledChangedAngle );
   connect( cadDockWidget, &QgsAdvancedDigitizingDockWidget::enabledChangedDistance, this, &QgsAdvancedDigitizingFloater::enabledChangedDistance );
 
-  // Connect our line edits signals to update cadDockWidget's tate
+  // Connect our line edits signals to update cadDockWidget's state
   connect( mXLineEdit, &QLineEdit::returnPressed, cadDockWidget, [ = ]() { cadDockWidget->setX( mXLineEdit->text() ); } );
   connect( mYLineEdit, &QLineEdit::returnPressed, cadDockWidget, [ = ]() { cadDockWidget->setY( mYLineEdit->text() ); } );
   connect( mAngleLineEdit, &QLineEdit::returnPressed, cadDockWidget, [ = ]() { cadDockWidget->setAngle( mAngleLineEdit->text() ); } );
