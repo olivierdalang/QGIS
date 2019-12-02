@@ -368,8 +368,13 @@ static QVariant fcnRndF( const QVariantList &values, const QgsExpressionContext 
 {
   double min = QgsExpressionUtils::getDoubleValue( values.at( 0 ), parent );
   double max = QgsExpressionUtils::getDoubleValue( values.at( 1 ), parent );
+  qlonglong seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
   if ( max < min )
     return QVariant();
+
+  if ( seed )
+    qsrand(seed);
+
 
   // Return a random double in the range [min, max] (inclusive)
   double f = static_cast< double >( qrand() ) / RAND_MAX;
@@ -379,8 +384,12 @@ static QVariant fcnRnd( const QVariantList &values, const QgsExpressionContext *
 {
   qlonglong min = QgsExpressionUtils::getIntValue( values.at( 0 ), parent );
   qlonglong max = QgsExpressionUtils::getIntValue( values.at( 1 ), parent );
+  qlonglong seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
   if ( max < min )
     return QVariant();
+
+  if ( seed )
+    qsrand(seed);
 
   // Return a random integer in the range [min, max] (inclusive)
   return QVariant( min + ( qrand() % static_cast< qlonglong >( max - min + 1 ) ) );
@@ -5216,11 +5225,11 @@ const QList<QgsExpressionFunction *> &QgsExpression::Functions()
         << new QgsStaticExpressionFunction( QStringLiteral( "log" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "base" ) ) << QgsExpressionFunction::Parameter( QStringLiteral( "value" ) ), fcnLog, QStringLiteral( "Math" ) )
         << new QgsStaticExpressionFunction( QStringLiteral( "round" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "value" ) ) << QgsExpressionFunction::Parameter( QStringLiteral( "places" ), true, 0 ), fcnRound, QStringLiteral( "Math" ) );
 
-    QgsStaticExpressionFunction *randFunc = new QgsStaticExpressionFunction( QStringLiteral( "rand" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "min" ) ) << QgsExpressionFunction::Parameter( QStringLiteral( "max" ) ), fcnRnd, QStringLiteral( "Math" ) );
+    QgsStaticExpressionFunction *randFunc = new QgsStaticExpressionFunction( QStringLiteral( "rand" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "min" ) ) << QgsExpressionFunction::Parameter( QStringLiteral( "max" ) ) << QgsExpressionFunction::Parameter( QStringLiteral( "seed" ), true, 0 ), fcnRnd, QStringLiteral( "Math" ) );
     randFunc->setIsStatic( false );
     functions << randFunc;
 
-    QgsStaticExpressionFunction *randfFunc = new QgsStaticExpressionFunction( QStringLiteral( "randf" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "min" ), true, 0.0 ) << QgsExpressionFunction::Parameter( QStringLiteral( "max" ), true, 1.0 ), fcnRndF, QStringLiteral( "Math" ) );
+    QgsStaticExpressionFunction *randfFunc = new QgsStaticExpressionFunction( QStringLiteral( "randf" ), QgsExpressionFunction::ParameterList() << QgsExpressionFunction::Parameter( QStringLiteral( "min" ), true, 0.0 ) << QgsExpressionFunction::Parameter( QStringLiteral( "max" ), true, 1.0 ) << QgsExpressionFunction::Parameter( QStringLiteral( "seed" ), true, 0 ), fcnRndF, QStringLiteral( "Math" ) );
     randfFunc->setIsStatic( false );
     functions << randfFunc;
 
