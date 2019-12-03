@@ -379,7 +379,19 @@ static QVariant fcnRndF( const QVariantList &values, const QgsExpressionContext 
   }
   else
   {
-    quint32 seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
+    quint32 seed;
+    if( QgsExpressionUtils::isIntSafe( values.at( 2 ) ) )
+    {
+      // if seed can be converted to int, we use as is
+      seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
+    }
+    else
+    {
+      // if not, we hash string representation to int
+      QString seedStr = QgsExpressionUtils::getStringValue( values.at( 2 ), parent );
+      std::hash<std::string> hasher;
+      seed = hasher(seedStr.toStdString());
+    }
     generator = &QRandomGenerator::QRandomGenerator(seed);
   }
 
@@ -400,7 +412,19 @@ static QVariant fcnRnd( const QVariantList &values, const QgsExpressionContext *
   }
   else
   {
-    quint32 seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
+    quint32 seed;
+    if( QgsExpressionUtils::isIntSafe( values.at( 2 ) ) )
+    {
+      // if seed can be converted to int, we use as is
+      seed = QgsExpressionUtils::getIntValue( values.at( 2 ), parent );
+    }
+    else
+    {
+      // if not, we hash string representation to int
+      QString seedStr = QgsExpressionUtils::getStringValue( values.at( 2 ), parent );
+      std::hash<std::string> hasher;
+      seed = hasher(seedStr.toStdString());
+    }
     generator = &QRandomGenerator::QRandomGenerator(seed);
   }
 
