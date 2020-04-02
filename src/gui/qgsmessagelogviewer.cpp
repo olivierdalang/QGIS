@@ -80,7 +80,20 @@ void QgsMessageLogViewer::showContextMenuForTabBar( QPoint point )
     }
   }
          );
-  mTabBarContextMenu->addAction( actionCloseOtherTabs );
+  mTabBarContextMenu->addAction( actionCloseAllTabs );
+
+  QAction *actionCloseAllTabs = new QAction( tr( "Close All Tabs" ), mTabBarContextMenu );
+  actionCloseAllTabs->setEnabled( tabWidget->tabBar()->count() > 1 );
+  connect( actionCloseAllTabs, &QAction::triggered, this, [this, tabIndex]
+  {
+    int i;
+    for ( i = tabWidget->tabBar()->count() - 1; i >= 0; i-- )
+    {
+      closeTab( i );
+    }
+  }
+         );
+  mTabBarContextMenu->addAction( actionCloseAllTabs );
 
   mTabBarContextMenu->exec( tabWidget->tabBar()->mapToGlobal( point ) );
 }
