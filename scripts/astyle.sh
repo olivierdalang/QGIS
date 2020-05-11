@@ -82,14 +82,14 @@ if ! type -p autopep8 >/dev/null; then
 	}
 fi
 
-ASTYLEOPTS=$(dirname "$0")/astyle.options
-if type -p cygpath >/dev/null; then
-	ASTYLEOPTS="$(cygpath -w "$ASTYLEOPTS")"
-fi
+ASTYLEOPTS=scripts/astyle.options
+# if type -p cygpath >/dev/null; then
+# 	ASTYLEOPTS="$(cygpath -w "$ASTYLEOPTS")"
+# fi
 
-if type -p wslpath >/dev/null; then
-	ASTYLEOPTS="$(wslpath -a -w "$ASTYLEOPTS")"
-fi
+# if type -p wslpath >/dev/null; then
+# 	ASTYLEOPTS="$(wslpath -a -w "$ASTYLEOPTS")"
+# fi
 
 set -e
 
