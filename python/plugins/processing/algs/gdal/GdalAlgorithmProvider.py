@@ -39,6 +39,7 @@ from .ClipRasterByExtent import ClipRasterByExtent
 from .ClipRasterByMask import ClipRasterByMask
 from .ColorRelief import ColorRelief
 from .contour import contour, contour_polygon
+from .CreateCog import CreateCog
 from .Datasources2Vrt import Datasources2Vrt
 from .fillnodata import fillnodata
 from .gdalinfo import gdalinfo
@@ -73,6 +74,7 @@ from .warp import warp
 from .pansharp import pansharp
 from .rasterize_over_fixed_value import rasterize_over_fixed_value
 from .viewshed import viewshed
+from .ValidateCog import ValidateCog
 
 from .extractprojection import ExtractProjection
 from .rasterize_over import rasterize_over
@@ -148,6 +150,7 @@ class GdalAlgorithmProvider(QgsProcessingProvider):
             ClipRasterByExtent(),
             ClipRasterByMask(),
             ColorRelief(),
+            CreateCog(),
             contour(),
             contour_polygon(),
             Datasources2Vrt(),
@@ -180,6 +183,7 @@ class GdalAlgorithmProvider(QgsProcessingProvider):
             translate(),
             tpi(),
             tri(),
+            ValidateCog(),
             warp(),
             pansharp(),
             # rasterize(),
