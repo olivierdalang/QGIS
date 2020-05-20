@@ -72,6 +72,9 @@ QgsRasterFormatSaveOptionsWidget::QgsRasterFormatSaveOptionsWidget( QWidget *par
     sBuiltinProfiles[ QStringLiteral( "z_gtiff_4jpeg" )] =
       ( QStringList() << QStringLiteral( "GTiff" ) << tr( "JPEG Compression" )
         << QStringLiteral( "COMPRESS=JPEG JPEG_QUALITY=75" ) );
+    sBuiltinProfiles[ QStringLiteral( "z_gtiff_cog" )] =
+      ( QStringList() << QStringLiteral( "COG" ) << tr( "Cloud Optimized Geotiff (COG)" )
+        << QStringLiteral( "TILING_SCHEME=GoogleMapsCompatible COMPRESS=JPEG BIGTIFF=IF_NEEDED" ) );
 
     // overview compression schemes for GTiff format, see
     // http://www.gdal.org/gdaladdo.html and http://www.gdal.org/frmt_gtiff.html

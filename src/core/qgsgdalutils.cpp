@@ -35,6 +35,10 @@ bool QgsGdalUtils::supportsRasterCreate( GDALDriverH driver )
     // it supports Create() but only for vector side
     return false;
   }
+  if ( driverShortName == QLatin1String( "COG" ) )
+  {
+    return true;
+  }
   char **driverMetadata = GDALGetMetadata( driver, nullptr );
   return  CSLFetchBoolean( driverMetadata, GDAL_DCAP_CREATE, false ) &&
           CSLFetchBoolean( driverMetadata, GDAL_DCAP_RASTER, false );
