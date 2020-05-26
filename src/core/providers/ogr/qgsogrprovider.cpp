@@ -3991,12 +3991,17 @@ GDALDatasetH QgsOgrProviderUtils::GDALOpenWrapper( const char *pszPath, bool bUp
   }
 
   QString filePath( QString::fromUtf8( pszPath ) );
+  QgsMessageLog::logMessage("--------- "+filePath+" ---------");
+
   bool bIsLocalGpkg = false;
   if ( QFileInfo( filePath ).suffix().compare( QLatin1String( "gpkg" ), Qt::CaseInsensitive ) == 0 &&
        IsLocalFile( filePath ) &&
        !CPLGetConfigOption( "OGR_SQLITE_JOURNAL", nullptr ) &&
        QgsSettings().value( QStringLiteral( "qgis/walForSqlite3" ), true ).toBool() )
   {
+    // CPLSetThreadLocalConfigOption( "OGR_SQLITE_JOURNAL", "DELETE" );
+    QgsMessageLog::logMessage("SETTING WAL...");
+
     // For GeoPackage, we force opening of the file in WAL (Write Ahead Log)
     // mode so as to avoid readers blocking writer(s), and vice-versa.
     // https://www.sqlite.org/wal.html
@@ -4005,6 +4010,9 @@ GDALDatasetH QgsOgrProviderUtils::GDALOpenWrapper( const char *pszPath, bool bUp
     CPLSetThreadLocalConfigOption( "OGR_SQLITE_JOURNAL", "WAL" );
     bIsLocalGpkg = true;
   }
+  QgsMessageLog::logMessage( "JOURNAL SETTING ?" );
+  QgsMessageLog::logMessage( CPLGetConfigOption( "OGR_SQLITE_JOURNAL", "not set" ) );
+
 
   bool modify_OGR_GPKG_FOREIGN_KEY_CHECK = !CPLGetConfigOption( "OGR_GPKG_FOREIGN_KEY_CHECK", nullptr );
   if ( modify_OGR_GPKG_FOREIGN_KEY_CHECK )
@@ -4015,6 +4023,20 @@ GDALDatasetH QgsOgrProviderUtils::GDALOpenWrapper( const char *pszPath, bool bUp
   const int nOpenFlags = GDAL_OF_VECTOR | ( bUpdate ? GDAL_OF_UPDATE : 0 );
   GDALDatasetH hDS = GDALOpenEx( pszPath, nOpenFlags, nullptr, papszOpenOptions, nullptr );
   CSLDestroy( papszOpenOptions );
+
+  ////////////// START DEBUG //////////////
+  if ( QFileInfo( filePath ).suffix().compare( QLatin1String( "gpkg" ), Qt::CaseInsensitive ) == 0 )
+  {
+    OGRLayerH hSqlLyrDEBUG1 = GDALDatasetExecuteSQL( hDS,
+                                "PRAGMA journal_mode",
+                                nullptr, nullptr );
+
+    gdal::ogr_feature_unique_ptr hFeatDEBUG1( OGR_L_GetNextFeature( hSqlLyrDEBUG1 ) );
+    const char *pszRetDEBUG1 = OGR_F_GetFieldAsString( hFeatDEBUG1.get(), 0 );
+    QgsMessageLog::logMessage( QStringLiteral( "ACTUAL journal_mode: %1" ).arg( pszRetDEBUG1 ) );
+    GDALDatasetReleaseResultSet( hDS, hSqlLyrDEBUG1 );
+  }
+  ////////////// END DEBUG //////////////
 
   CPLSetThreadLocalConfigOption( "OGR_SQLITE_JOURNAL", nullptr );
   if ( modify_OGR_GPKG_FOREIGN_KEY_CHECK )
