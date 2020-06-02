@@ -1033,14 +1033,14 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     void drawGridLine( const QPolygonF &line, QgsRenderContext &context ) const;
 
-    void sortGridLinesOnBorders( const QList< QPair< double, QLineF > > &hLines, const QList< QPair< double, QLineF > > &vLines, QMap< double, double > &leftFrameEntries,
-                                 QMap< double, double > &rightFrameEntries, QMap< double, double > &topFrameEntries, QMap< double, double > &bottomFrameEntries ) const;
+    void sortGridLinesOnBorders( const QList< QPair< double, QLineF > > &hLines, const QList< QPair< double, QLineF > > &vLines, QMap< double, QgsMapAnnotation > &leftFrameEntries,
+                                 QMap< double, QgsMapAnnotation > &rightFrameEntries, QMap< double, QgsMapAnnotation > &topFrameEntries, QMap< double, QgsMapAnnotation > &bottomFrameEntries ) const;
 
     /**
      * Draw the grid frame's border. If optional extension argument is specified, nothing will be drawn and instead
      * the maximum extension of the frame border outside of the map frame will be stored in this variable.
      */
-    void drawGridFrameBorder( QPainter *p, const QMap< double, double > &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameBorder( QPainter *p, const QMap< double, QgsMapAnnotation > &borderPos, BorderSide border, double *extension = nullptr ) const;
 
     /**
      * Returns the item border of a point (in item coordinates)
@@ -1068,9 +1068,9 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     void drawGridMarker( QPointF point, QgsRenderContext &context ) const;
 
-    void drawGridFrameZebraBorder( QPainter *p, const QMap<double, double> &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameZebraBorder( QPainter *p, const QMap<double, QgsMapAnnotation> &borderPos, BorderSide border, double *extension = nullptr ) const;
 
-    void drawGridFrameTicks( QPainter *p, const QMap<double, double> &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameTicks( QPainter *p, const QMap<double, QgsMapAnnotation> &borderPos, BorderSide border, double *extension = nullptr ) const;
 
     void drawGridFrameLineBorder( QPainter *p, BorderSide border, double *extension = nullptr ) const;
 
