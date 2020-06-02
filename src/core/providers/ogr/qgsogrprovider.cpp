@@ -3992,22 +3992,25 @@ GDALDatasetH QgsOgrProviderUtils::GDALOpenWrapper( const char *pszPath, bool bUp
 
   QString filePath( QString::fromUtf8( pszPath ) );
 
-  bool bIsGpkg = QFileInfo( filePath ).suffix().compare( QLatin1String( "gpkg" ), Qt::CaseInsensitive ) == 0;
-  bool bIsLocalGpkg = false;
-  if ( bIsGpkg &&
+  QString suffix = QFileInfo( filePath ).suffix();
+  bool bIsSqlite = ( suffix.compare( QLatin1String( "gpkg" ), Qt::CaseInsensitive ) == 0 ||
+                     suffix.compare( QLatin1String( "sqlite" ), Qt::CaseInsensitive ) == 0 ||
+                     suffix.compare( QLatin1String( "sqlite3" ), Qt::CaseInsensitive ) == 0 );
+  bool bIsLocalSqlite = false;
+  if ( bIsSqlite &&
        IsLocalFile( filePath ) &&
        !CPLGetConfigOption( "OGR_SQLITE_JOURNAL", nullptr ) &&
        QgsSettings().value( QStringLiteral( "qgis/walForSqlite3" ), true ).toBool() )
   {
-    // For GeoPackage, we force opening of the file in WAL (Write Ahead Log)
+    // For GeoPackage or Sqlite, we force opening of the file in WAL (Write Ahead Log)
     // mode so as to avoid readers blocking writer(s), and vice-versa.
     // https://www.sqlite.org/wal.html
     // But only do that on a local file since WAL is advertised not to work
     // on network shares
     CPLSetThreadLocalConfigOption( "OGR_SQLITE_JOURNAL", "WAL" );
-    bIsLocalGpkg = true;
+    bIsLocalSqlite = true;
   }
-  else if ( bIsGpkg )
+  else if ( bIsSqlite )
   {
     // If WAL isn't set, we explicitely disable it, as it is persistent and it
     // may have been set on a previous connection.
@@ -4037,7 +4040,7 @@ GDALDatasetH QgsOgrProviderUtils::GDALOpenWrapper( const char *pszPath, bool bUp
     return nullptr;
   }
   GDALDriverH hDrv = GDALGetDatasetDriver( hDS );
-  if ( bIsLocalGpkg && strcmp( GDALGetDriverShortName( hDrv ), "GPKG" ) == 0 )
+  if ( bIsLocalSqlite && ( strcmp( GDALGetDriverShortName( hDrv ), "GPKG" ) == 0 || strcmp( GDALGetDriverShortName( hDrv ), "SQLite" ) == 0 ) )
   {
     QMutexLocker locker( sGlobalMutex() );
     ( *sMapCountOpenedDS() )[ filePath ]++;
@@ -4095,7 +4098,7 @@ void QgsOgrProviderUtils::GDALCloseWrapper( GDALDatasetH hDS )
   GDALDriverH mGDALDriver = GDALGetDatasetDriver( hDS );
   QString mGDALDriverName = GDALGetDriverShortName( mGDALDriver );
   QString datasetName( QString::fromUtf8( GDALGetDescription( hDS ) ) );
-  if ( mGDALDriverName == QLatin1String( "GPKG" ) &&
+  if ( ( mGDALDriverName == QLatin1String( "GPKG" ) || mGDALDriverName == QLatin1String( "SQLite" ) ) &&
        IsLocalFile( datasetName ) &&
        !CPLGetConfigOption( "OGR_SQLITE_JOURNAL", nullptr ) )
   {
@@ -5034,7 +5037,7 @@ QgsOgrLayerUniquePtr QgsOgrProviderUtils::getLayer( const QString &dsName,
 
 static QDateTime getLastModified( const QString &dsName )
 {
-  if ( dsName.endsWith( ".gpkg", Qt::CaseInsensitive ) )
+  if ( dsName.endsWith( ".gpkg", Qt::CaseInsensitive ) || dsName.endsWith( ".sqlite", Qt::CaseInsensitive ) || dsName.endsWith( ".sqlite3", Qt::CaseInsensitive ) )
   {
     QFileInfo info( dsName + "-wal" );
     if ( info.exists() )
