@@ -23,6 +23,7 @@
 #include "qgslayoutitemmapitem.h"
 #include "qgssymbol.h"
 #include <QPainter>
+#include <QVector2D>
 
 class QgsCoordinateTransform;
 class QgsLayoutItemMapGrid;
@@ -192,7 +193,11 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       Horizontal = 0, //!< Draw annotations horizontally
       Vertical, //!< Draw annotations vertically, ascending
       VerticalDescending, //!< Draw annotations vertically, descending
-      BoundaryDirection //!< Annotations follow the boundary direction
+      BoundaryDirection, //!< Annotations follow the boundary direction
+      // ParallelToTick, //!< Draw annotations parallel to tick
+      AboveTick, //!< Draw annotations parallel to tick (above the line)
+      OnTick, //!< Draw annotations parallel to tick (on the line)
+      UnderTick, //!< Draw annotations parallel to tick (under the line)
     };
 
     /**
@@ -219,7 +224,8 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       Left, //!< Left border
       Right, //!< Right border
       Bottom, //!< Bottom border
-      Top //!< Top border
+      Top, //!< Top border
+      // None, //!< No border (the annotation is hidden)
     };
 
     /**
@@ -235,6 +241,15 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       LineBorder, //!< Simple solid line frame
       LineBorderNautical, //!< Simple solid line frame, with nautical style diagonals on corners
       ZebraNautical, //!< Black/white pattern, with nautical style diagonals on corners
+    };
+
+    /**
+     * Tick length mode (useful for rotated grids)
+     */
+    enum TickLengthMode
+    {
+      OrthogonalTicks = 0, //!< Align ticks orthogonaly
+      NormalizedTicks, //!< Constant tick lengths
     };
 
     /**
@@ -773,6 +788,78 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     double frameWidth() const { return mGridFrameWidth; }
 
     /**
+     * Enable/disable ticks rotation for rotated or reprojected grids.
+     * \see rotatedTicksEnabled()
+     */
+    void setRotatedTicksEnabled( const bool state ) { mRotatedTicksEnabled = state; }
+
+    /**
+     * Gets whether ticks rotation for rotated or reprojected grids is enabled.
+     * \see setRotatedTicksEnabled()
+     */
+    double rotatedTicksEnabled() const { return mRotatedTicksEnabled; }
+
+    /**
+    * Sets the tick length calculation mode.
+    * \see rotatedTicksLengthMode()
+    */
+    void setRotatedTicksLengthMode( const TickLengthMode mode ) { mRotatedTicksLengthMode = mode; }
+
+    /**
+     * Returns the grid frame style.
+     * \see setRotatedTicksLengthMode()
+     */
+    TickLengthMode rotatedTicksLengthMode() const { return mRotatedTicksLengthMode; }
+
+    /**
+     * Sets the \a minimum angle (in degrees) below which ticks are not drawn.
+     * \see rotatedTicksMinimumAngle()
+     */
+    void setRotatedTicksMinimumAngle( const double angle ) { mRotatedTicksMinimumAngle = angle; }
+
+    /**
+     * Gets the \a minimum angle (in degrees) below which ticks are not drawn.
+     * \see setRotatedTicksMinimumAngle()
+     */
+    double rotatedTicksMinimumAngle() const { return mRotatedTicksMinimumAngle; }
+
+    /**
+     * Enable/disable annotations rotation for rotated or reprojected grids.
+     * \see rotatedAnnotationsEnabled()
+     */
+    void setRotatedAnnotationsEnabled( const bool state ) { mRotatedAnnotationsEnabled = state; }
+
+    /**
+     * Gets whether annotations rotation for rotated or reprojected grids is enabled.
+     * \see setRotatedAnnotationsEnabled()
+     */
+    double rotatedAnnotationsEnabled() const { return mRotatedAnnotationsEnabled; }
+
+    /**
+    * Sets the annotation length calculation mode.
+    * \see rotatedAnnotationsLengthMode()
+    */
+    void setRotatedAnnotationsLengthMode( const TickLengthMode mode ) { mRotatedAnnotationsLengthMode = mode; }
+
+    /**
+     * Returns the grid frame style.
+     * \see setRotatedAnnotationsLengthMode()
+     */
+    TickLengthMode rotatedAnnotationsLengthMode() const { return mRotatedAnnotationsLengthMode; }
+
+    /**
+     * Sets the \a minimum angle (in degrees) below which annotated are not drawn.
+     * \see rotatedAnnotationsMinimumAngle()
+     */
+    void setRotatedAnnotationsMinimumAngle( const double angle ) { mRotatedAnnotationsMinimumAngle = angle; }
+
+    /**
+     * Gets the \a minimum angle (in degrees) below which annotated are not drawn.
+     * \see setRotatedAnnotationsMinimumAngle()
+     */
+    double rotatedAnnotationsMinimumAngle() const { return mRotatedAnnotationsMinimumAngle; }
+
+    /**
      * Sets the grid frame margin (in layout units).
      * This property controls distance between the map frame and the grid frame.
      * \see frameMargin()
@@ -867,7 +954,51 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       double right = 0.0;
       double bottom = 0.0;
       double left = 0.0;
+
+      /**
+       * Updates the specified border of the extension
+       */
+      void UpdateBorder( BorderSide border, double value )
+      {
+        switch ( border )
+        {
+          case QgsLayoutItemMapGrid::Left:
+            left = std::max( left, value );
+            break;
+          case QgsLayoutItemMapGrid::Right:
+            right = std::max( right, value );
+            break;
+          case QgsLayoutItemMapGrid::Top:
+            top = std::max( top, value );
+            break;
+          case QgsLayoutItemMapGrid::Bottom:
+            bottom = std::max( bottom, value );
+            break;
+        }
+      }
     };
+
+    struct GridLineAnnotation
+    {
+      BorderSide border; // border on which the annotation is
+      QVector2D position; // position on the frame
+      QVector2D vector; // vector towards map center
+      double angle; // the (acute) angle formed between the vector and the border
+    };
+
+    /**
+     * Helper that represents a grid line, for drawing the line itself an the
+     * anotations on the frame.
+     */
+    struct GridLine
+    {
+      QPolygonF line; // the actual line, can be straight with two points or curved if transformed
+      double coordinate; // the coordinate value
+      QgsLayoutItemMapGrid::AnnotationCoordinate coordinateType; // whether it's a latitude or longitude line
+      GridLineAnnotation startAnnotation; // the annotation on the start point
+      GridLineAnnotation endAnnotation; // the annotation on the end point
+    };
+    mutable QList< GridLine > mGridLines;
 
     //! True if a re-transformation of grid lines is required
     mutable bool mTransformDirty = true;
@@ -926,6 +1057,7 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     mutable std::unique_ptr< QgsExpression > mGridAnnotationExpression;
 
     FrameStyle mGridFrameStyle = QgsLayoutItemMapGrid::NoFrame;
+
     FrameSideFlags mGridFrameSides;
     double mGridFrameWidth = 2.0;
     double mGridFramePenThickness = 0.3;
@@ -934,6 +1066,12 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     QColor mGridFrameFillColor2 = Qt::black;
     double mCrossLength = 3.0;
     double mGridFrameMargin = 0.0;
+    bool mRotatedTicksEnabled;
+    TickLengthMode mRotatedTicksLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
+    double mRotatedTicksMinimumAngle = 30.0;
+    bool mRotatedAnnotationsEnabled;
+    TickLengthMode mRotatedAnnotationsLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
+    double mRotatedAnnotationsMinimumAngle = 30.0;
 
     double mMinimumIntervalWidth = 50;
     double mMaximumIntervalWidth = 100;
@@ -973,74 +1111,62 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     double mEvaluatedCrossLength = 0;
     double mEvaluatedGridFrameLineThickness = 0;
 
-    class QgsMapAnnotation
-    {
-      public:
-        double coordinate;
-        QPointF itemPosition;
-        QgsLayoutItemMapGrid::AnnotationCoordinate coordinateType;
-    };
+    /**
+     * Updates the grid lines annotation positions
+     */
+    void updateGridLinesAnnotationsPositions() const;
 
     /**
      * Draws the map grid. If extension is specified, then no grid will be drawn and instead the maximum extension
      * for the grid outside of the map frame will be calculated.
      */
-    void drawGridFrame( QPainter *p, const QList< QPair< double, QLineF > > &hLines, const QList< QPair< double, QLineF > > &vLines, GridExtension *extension = nullptr ) const;
+    void drawGridFrame( QPainter *p, GridExtension *extension = nullptr ) const;
 
     /**
      * Draw coordinates for mGridAnnotationType Coordinate
         \param p drawing painter
-        \param hLines horizontal coordinate lines in item coordinates
-        \param vLines vertical coordinate lines in item coordinates
         \param expressionContext expression context for evaluating custom annotation formats
         \param extension optional. If specified, nothing will be drawn and instead the maximum extension for the grid
         annotations will be stored in this variable.
      */
-    void drawCoordinateAnnotations( QPainter *p, const QList< QPair< double, QLineF > > &hLines, const QList< QPair< double, QLineF > > &vLines, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotations( QPainter *p, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
 
     /**
      * Draw an annotation. If optional extension argument is specified, nothing will be drawn and instead
      * the extension of the annotation outside of the map frame will be stored in this variable.
      */
-    void drawCoordinateAnnotation( QPainter *p, QPointF pos, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotation( QPainter *p, GridLineAnnotation annot, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
 
-    /**
-     * Draws a single annotation
-     * \param p drawing painter
-     * \param pos item coordinates where to draw
-     * \param rotation text rotation
-     * \param annotationText the text to draw
-     */
-    void drawAnnotation( QPainter *p, QPointF pos, int rotation, const QString &annotationText ) const;
+    // /**
+    //  * Sets xpos, ypos, anchor and rotation from a tickmark to be used by drawCoordinateAnnotation()
+    //  */
+    // void positionFromTick( QLineF tick, QgsLayoutItemMapGrid::BorderSide border,  double textWidth,  double textHeight, double &xpos, double &ypos, QPointF &anchor, int &rotation ) const;
 
     QString gridAnnotationString( double value, AnnotationCoordinate coord, QgsExpressionContext &expressionContext ) const;
 
     /**
-     * Returns the grid lines with associated coordinate value
+     * Computes the grid lines with associated coordinate value
         \returns 0 in case of success*/
-    int xGridLines( QList< QPair< double, QLineF > > &lines ) const;
+    int xGridLines() const;
 
     /**
-     * Returns the grid lines for the y-coordinates. Not vertical in case of rotation
+     * Computes the grid lines for the y-coordinates. Not vertical in case of rotation
         \returns 0 in case of success*/
-    int yGridLines( QList< QPair< double, QLineF > > &lines ) const;
+    int yGridLines() const;
 
-    int xGridLinesCrsTransform( const QgsRectangle &bbox, const QgsCoordinateTransform &t, QList< QPair< double, QPolygonF > > &lines ) const;
+    int xGridLinesCrsTransform( const QgsRectangle &bbox, const QgsCoordinateTransform &t ) const;
 
-    int yGridLinesCrsTransform( const QgsRectangle &bbox, const QgsCoordinateTransform &t, QList< QPair< double, QPolygonF > > &lines ) const;
+    int yGridLinesCrsTransform( const QgsRectangle &bbox, const QgsCoordinateTransform &t ) const;
 
     void drawGridLine( const QLineF &line, QgsRenderContext &context ) const;
 
     void drawGridLine( const QPolygonF &line, QgsRenderContext &context ) const;
 
-    void sortGridLinesOnBorders( const QList< QPair< double, QLineF > > &hLines, const QList< QPair< double, QLineF > > &vLines, QMap< double, double > &leftFrameEntries,
-                                 QMap< double, double > &rightFrameEntries, QMap< double, double > &topFrameEntries, QMap< double, double > &bottomFrameEntries ) const;
-
     /**
      * Draw the grid frame's border. If optional extension argument is specified, nothing will be drawn and instead
      * the maximum extension of the frame border outside of the map frame will be stored in this variable.
      */
-    void drawGridFrameBorder( QPainter *p, const QMap< double, double > &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameBorder( QPainter *p, BorderSide border, double *extension = nullptr ) const;
 
     /**
      * Returns the item border of a point (in item coordinates)
@@ -1057,10 +1183,9 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     QPolygonF scalePolygon( const QPolygonF &polygon, double scale ) const;
 
     //! Draws grid if CRS is different to map CRS
-    void drawGridCrsTransform( QgsRenderContext &context, double dotsPerMM, QList< QPair< double, QLineF > > &horizontalLines,
-                               QList< QPair< double, QLineF > > &verticalLines, bool calculateLinesOnly = false ) const;
+    void drawGridCrsTransform( QgsRenderContext &context, double dotsPerMM, bool calculateLinesOnly = false ) const;
 
-    void drawGridNoTransform( QgsRenderContext &context, double dotsPerMM, QList<QPair<double, QLineF> > &horizontalLines, QList<QPair<double, QLineF> > &verticalLines, bool calculateLinesOnly = false ) const;
+    void drawGridNoTransform( QgsRenderContext &context, double dotsPerMM, bool calculateLinesOnly = false ) const;
 
     void createDefaultGridLineSymbol();
 
@@ -1068,11 +1193,13 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     void drawGridMarker( QPointF point, QgsRenderContext &context ) const;
 
-    void drawGridFrameZebraBorder( QPainter *p, const QMap<double, double> &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameZebra( QPainter *p, GridExtension *extension = nullptr ) const;
 
-    void drawGridFrameTicks( QPainter *p, const QMap<double, double> &borderPos, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameZebraBorder( QPainter *p, BorderSide border, double *extension = nullptr ) const;
 
-    void drawGridFrameLineBorder( QPainter *p, BorderSide border, double *extension = nullptr ) const;
+    void drawGridFrameTicks( QPainter *p, GridExtension *extension = nullptr ) const;
+
+    void drawGridFrameLine( QPainter *p, GridExtension *extension = nullptr ) const;
 
     void calculateCrsTransformLines() const;
 
