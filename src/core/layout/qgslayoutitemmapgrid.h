@@ -197,7 +197,6 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       Vertical, //!< Draw annotations vertically, ascending
       VerticalDescending, //!< Draw annotations vertically, descending
       BoundaryDirection, //!< Annotations follow the boundary direction
-      // ParallelToTick, //!< Draw annotations parallel to tick
       AboveTick, //!< Draw annotations parallel to tick (above the line)
       OnTick, //!< Draw annotations parallel to tick (on the line)
       UnderTick, //!< Draw annotations parallel to tick (under the line)
@@ -228,7 +227,6 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
       Right, //!< Right border
       Bottom, //!< Bottom border
       Top, //!< Top border
-      // None, //!< No border (the annotation is hidden)
     };
 
     /**
@@ -579,33 +577,37 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
      */
     bool annotationEnabled() const { return mShowGridAnnotation; }
 
-    /**
-     * Sets the \a font used for drawing grid annotations.
-     * \see annotationFont()
-     */
-    void setAnnotationFont( const QFont &font ) { mGridAnnotationFont = font; }
-
-    /**
-     * Returns the font used for drawing grid annotations.
-     * \see setAnnotationFont()
-     */
-    QFont annotationFont() const { return mGridAnnotationFont; }
-
-    void setAnnotationTextFormat( const QgsTextFormat& format ) { mAnnotationFormat = format; }
+    void setAnnotationTextFormat( const QgsTextFormat &format ) { mAnnotationFormat = format; }
 
     QgsTextFormat annotationTextFormat() const { return mAnnotationFormat; }
 
     /**
+     * Sets the \a font used for drawing grid annotations.
+     * \see annotationFont()
+     * \deprecated since QGIS 3.16 use annotationTextFormat().setFont() instead
+     */
+    void setAnnotationFont( const QFont &font ) { mAnnotationFormat.setFont( font ); mAnnotationFormat.setSize( font.pointSizeF() ); mAnnotationFormat.setSizeUnit( QgsUnitTypes::RenderPoints ); }
+
+    /**
+     * Returns the font used for drawing grid annotations.
+     * \see setAnnotationFont()
+     * \deprecated since QGIS 3.16 use annotationTextFormat().font() instead
+     */
+    QFont annotationFont() const { return mAnnotationFormat.font(); }
+
+    /**
      * Sets the font \a color used for drawing grid annotations.
      * \see annotationFontColor()
+     * \deprecated since QGIS 3.16 use annotationTextFormat().setColor() instead
      */
-    void setAnnotationFontColor( const QColor &color ) { mGridAnnotationFontColor = color; }
+    void setAnnotationFontColor( const QColor &color ) { mAnnotationFormat.setColor( color ); mAnnotationFormat.setOpacity( color.alphaF() ); }
 
     /**
      * Returns the font color used for drawing grid annotations.
      * \see setAnnotationFontColor()
+     * \deprecated since QGIS 3.16 use annotationTextFormat().color() instead
      */
-    QColor annotationFontColor() const { return mGridAnnotationFontColor; }
+    QColor annotationFontColor() const { return mAnnotationFormat.color(); }
 
     /**
      * Sets the coordinate \a precision for grid annotations.
@@ -1020,10 +1022,6 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     double mGridOffsetX = 0.0;
     //! Grid line offset in y-direction
     double mGridOffsetY = 0.0;
-    //! Font for grid line annotation
-    QFont mGridAnnotationFont;
-    //! Font color for grid coordinates
-    QColor mGridAnnotationFontColor  = Qt::black;
     //! Format for drawing grid annotations
     QgsTextFormat mAnnotationFormat;
     //! Digits after the dot
@@ -1138,13 +1136,13 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
         \param extension optional. If specified, nothing will be drawn and instead the maximum extension for the grid
         annotations will be stored in this variable.
      */
-    void drawCoordinateAnnotations( QgsRenderContext& context, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotations( QgsRenderContext &context, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
 
     /**
      * Draw an annotation. If optional extension argument is specified, nothing will be drawn and instead
      * the extension of the annotation outside of the map frame will be stored in this variable.
      */
-    void drawCoordinateAnnotation( QgsRenderContext& context, GridLineAnnotation annot, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotation( QgsRenderContext &context, GridLineAnnotation annot, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
 
     // /**
     //  * Sets xpos, ypos, anchor and rotation from a tickmark to be used by drawCoordinateAnnotation()
@@ -1213,7 +1211,8 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     void calculateCrsTransformLines() const;
 
     bool shouldShowDivisionForSide( AnnotationCoordinate coordinate, BorderSide side ) const;
-    bool shouldShowDivisionForDisplayMode( AnnotationCoordinate coordinate, DisplayMode mode ) const;
+    bool shouldShowAnnotationForSide( AnnotationCoordinate coordinate, BorderSide side ) const;
+    bool shouldShowForDisplayMode( AnnotationCoordinate coordinate, DisplayMode mode ) const;
     void refreshDataDefinedProperties();
 
     //! Returns diagonal of map in CRS units

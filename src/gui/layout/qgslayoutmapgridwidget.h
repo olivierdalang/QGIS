@@ -100,10 +100,9 @@ class GUI_EXPORT QgsLayoutMapGridWidget: public QgsLayoutItemBaseWidget, private
     void mAnnotationFormatComboBox_currentIndexChanged( int index );
     void mCoordinatePrecisionSpinBox_valueChanged( int value );
     void mDistanceToMapFrameSpinBox_valueChanged( double d );
-    void mAnnotationFontColorButton_colorChanged( const QColor &color );
 
-    void openFont2_clicked( );
-    void cleanUpGridAnnotationTextFormat( QgsPanelWidget* container );
+    void mAnnotationFontButton_clicked( );
+    void cleanUpGridAnnotationTextFormat( QgsPanelWidget *container );
     void updateGridAnnotationTextFormat();
 
 
@@ -121,7 +120,6 @@ class GUI_EXPORT QgsLayoutMapGridWidget: public QgsLayoutItemBaseWidget, private
 
     //! Sets the GUI elements to the values of mPicture
     void setGuiElementValues();
-    void annotationFontChanged();
     void lineSymbolChanged();
     void markerSymbolChanged();
     void gridEnabledToggled( bool active );
