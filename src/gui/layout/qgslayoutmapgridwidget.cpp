@@ -28,6 +28,8 @@
 #include "qgsexpressionbuilderdialog.h"
 #include "qgsvectorlayer.h"
 #include "qgsprojectviewsettings.h"
+#include "qgstextformatwidget.h"
+#include "qgsguiutils.h"
 
 QgsLayoutMapGridWidget::QgsLayoutMapGridWidget( QgsLayoutItemMapGrid *mapGrid, QgsLayoutItemMap *map )
   : QgsLayoutItemBaseWidget( nullptr, mapGrid )
@@ -104,6 +106,7 @@ QgsLayoutMapGridWidget::QgsLayoutMapGridWidget( QgsLayoutItemMapGrid *mapGrid, Q
   connect( mMaxWidthSpinBox, static_cast < void ( QDoubleSpinBox::* )( double ) > ( &QDoubleSpinBox::valueChanged ), this, &QgsLayoutMapGridWidget::maxIntervalChanged );
   connect( mAnnotationFontColorButton, &QgsColorButton::colorChanged, this, &QgsLayoutMapGridWidget::mAnnotationFontColorButton_colorChanged );
   connect( mEnabledCheckBox, &QCheckBox::toggled, this, &QgsLayoutMapGridWidget::gridEnabledToggled );
+  connect( mFontButton2, &QPushButton::clicked, this, &QgsLayoutMapGridWidget::openFont2_clicked );
   setPanelTitle( tr( "Map Grid Properties" ) );
 
   mAnnotationFontButton->setMode( QgsFontButton::ModeQFont );
@@ -1330,4 +1333,44 @@ void QgsLayoutMapGridWidget::mCoordinatePrecisionSpinBox_valueChanged( int value
   mMap->updateBoundingRect();
   mMap->update();
   mMap->endCommand();
+}
+
+
+void QgsLayoutMapGridWidget::updateGridAnnotationTextFormat()
+{
+  if ( !mMapGrid || !mMap )
+  {
+    return;
+  }
+
+  QgsTextFormatPanelWidget* w = qobject_cast<QgsTextFormatPanelWidget*>( sender() );
+  mMapGrid->setAnnotationTextFormat( w->format() );
+  mMap->updateBoundingRect();
+  mMap->update();
+}
+
+void QgsLayoutMapGridWidget::cleanUpGridAnnotationTextFormat( QgsPanelWidget* container )
+{
+  QgsTextFormatPanelWidget* w = qobject_cast<QgsTextFormatPanelWidget*>( container );
+  if ( !w )
+    return;
+
+  if ( !mMapGrid || !mMap )
+  {
+    return;
+  }
+
+  mMap->endCommand();
+}
+
+
+void QgsLayoutMapGridWidget::openFont2_clicked()
+{
+  QgsTextFormatPanelWidget* w = new QgsTextFormatPanelWidget( mMapGrid->annotationTextFormat() );
+
+  connect( w, SIGNAL( widgetChanged() ), this, SLOT( updateGridAnnotationTextFormat() ) );
+  connect( w, SIGNAL( panelAccepted( QgsPanelWidget* ) ), this, SLOT( cleanUpGridAnnotationTextFormat( QgsPanelWidget* ) ) );
+  openPanel( w );
+  mMap->beginCommand( tr( "Annotation font changed" ) );
+
 }

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>423</width>
-    <height>734</height>
+    <height>590</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -47,9 +47,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>409</width>
-        <height>1447</height>
+        <y>-658</y>
+        <width>408</width>
+        <height>1290</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -167,7 +167,7 @@
             <property name="decimals">
              <number>2</number>
             </property>
-            <property name="showClearButton" stdset="0">
+            <property name="showClearButton">
              <bool>false</bool>
             </property>
            </widget>
@@ -741,21 +741,35 @@
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout" columnstretch="0,0,0">
-          <item row="19" column="0">
+          <item row="20" column="0">
            <widget class="QLabel" name="label_10">
             <property name="text">
              <string>Rotated annotations alignement</string>
             </property>
            </widget>
           </item>
-          <item row="20" column="0">
+          <item row="19" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Rotate annotations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="1" colspan="2">
+           <widget class="QCheckBox" name="mRotatedAnnotationsCheckBox">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="0">
            <widget class="QLabel" name="label_9">
             <property name="text">
              <string>Skip low angled annotations</string>
             </property>
            </widget>
           </item>
-          <item row="20" column="1" colspan="2">
+          <item row="21" column="1" colspan="2">
            <widget class="QDoubleSpinBox" name="mRotatedAnnotationsThresholdSpinBox">
             <property name="suffix">
              <string> °</string>
@@ -768,7 +782,7 @@
             </property>
            </widget>
           </item>
-          <item row="19" column="1" colspan="2">
+          <item row="20" column="1" colspan="2">
            <widget class="QComboBox" name="mRotatedAnnotationsLengthModeComboBox"/>
           </item>
           <item row="0" column="0">
@@ -788,7 +802,7 @@
             </property>
            </widget>
           </item>
-          <item row="14" column="0">
+          <item row="15" column="0">
            <widget class="QLabel" name="mFontColorLabel">
             <property name="text">
              <string>Font color</string>
@@ -822,7 +836,7 @@
             </property>
            </widget>
           </item>
-          <item row="14" column="1" colspan="2">
+          <item row="15" column="1" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
              <widget class="QgsColorButton" name="mAnnotationFontColorButton">
@@ -858,7 +872,7 @@
           <item row="8" column="1" colspan="2">
            <widget class="QComboBox" name="mAnnotationPositionTopComboBox"/>
           </item>
-          <item row="17" column="0">
+          <item row="18" column="0">
            <widget class="QLabel" name="mCoordinatePrecisionLabel">
             <property name="text">
              <string>Coordinate precision</string>
@@ -895,7 +909,7 @@
             </item>
            </layout>
           </item>
-          <item row="17" column="1" colspan="2">
+          <item row="18" column="1" colspan="2">
            <widget class="QgsSpinBox" name="mCoordinatePrecisionSpinBox">
             <property name="showClearButton">
              <bool>false</bool>
@@ -921,7 +935,7 @@
           <item row="5" column="1" colspan="2">
            <widget class="QComboBox" name="mAnnotationPositionRightComboBox"/>
           </item>
-          <item row="15" column="1">
+          <item row="16" column="1">
            <widget class="QgsDoubleSpinBox" name="mDistanceToMapFrameSpinBox">
             <property name="suffix">
              <string> mm</string>
@@ -953,14 +967,14 @@
             </property>
            </widget>
           </item>
-          <item row="15" column="2">
+          <item row="16" column="2">
            <widget class="QgsPropertyOverrideButton" name="mLabelDistDDBtn">
             <property name="text">
              <string>…</string>
             </property>
            </widget>
           </item>
-          <item row="15" column="0">
+          <item row="16" column="0">
            <widget class="QLabel" name="mDistanceToFrameLabel">
             <property name="text">
              <string>Distance to map frame</string>
@@ -970,17 +984,10 @@
             </property>
            </widget>
           </item>
-          <item row="18" column="0">
-           <widget class="QLabel" name="label_11">
+          <item row="14" column="1">
+           <widget class="QToolButton" name="mFontButton2">
             <property name="text">
-             <string>Rotate annotations</string>
-            </property>
-           </widget>
-          </item>
-          <item row="18" column="1" colspan="2">
-           <widget class="QCheckBox" name="mRotatedAnnotationsCheckBox">
-            <property name="text">
-             <string/>
+             <string>Font2</string>
             </property>
            </widget>
           </item>
@@ -996,6 +1003,37 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
+   <class>QgsColorButton</class>
+   <extends>QToolButton</extends>
+   <header>qgscolorbutton.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>QgsDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>qgsdoublespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsFontButton</class>
+   <extends>QToolButton</extends>
+   <header>qgsfontbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsPropertyOverrideButton</class>
+   <extends>QToolButton</extends>
+   <header>qgspropertyoverridebutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>qgsspinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsSymbolButton</class>
+   <extends>QToolButton</extends>
+   <header>qgssymbolbutton.h</header>
+  </customwidget>
+  <customwidget>
    <class>QgsScrollArea</class>
    <extends>QScrollArea</extends>
    <header>qgsscrollarea.h</header>
@@ -1008,40 +1046,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>QgsDoubleSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>qgsdoublespinbox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>qgsspinbox.h</header>
-  </customwidget>
-  <customwidget>
    <class>QgsBlendModeComboBox</class>
    <extends>QComboBox</extends>
    <header>qgsblendmodecombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsSymbolButton</class>
-   <extends>QToolButton</extends>
-   <header>qgssymbolbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsPropertyOverrideButton</class>
-   <extends>QToolButton</extends>
-   <header>qgspropertyoverridebutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QgsColorButton</class>
-   <extends>QToolButton</extends>
-   <header>qgscolorbutton.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>QgsFontButton</class>
-   <extends>QToolButton</extends>
-   <header>qgsfontbutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

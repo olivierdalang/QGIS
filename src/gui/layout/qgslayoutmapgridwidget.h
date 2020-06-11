@@ -102,7 +102,13 @@ class GUI_EXPORT QgsLayoutMapGridWidget: public QgsLayoutItemBaseWidget, private
     void mDistanceToMapFrameSpinBox_valueChanged( double d );
     void mAnnotationFontColorButton_colorChanged( const QColor &color );
 
+    void openFont2_clicked( );
+    void cleanUpGridAnnotationTextFormat( QgsPanelWidget* container );
+    void updateGridAnnotationTextFormat();
+
+
   protected:
+
 
     //! Sets the current composer map values to the GUI elements
     virtual void updateGuiElements();

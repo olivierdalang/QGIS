@@ -22,6 +22,9 @@
 #include "qgis_sip.h"
 #include "qgslayoutitemmapitem.h"
 #include "qgssymbol.h"
+#include "qgstextrenderer.h"
+#include "qgstextformat.h"
+
 #include <QPainter>
 #include <QVector2D>
 
@@ -588,6 +591,10 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
      */
     QFont annotationFont() const { return mGridAnnotationFont; }
 
+    void setAnnotationTextFormat( const QgsTextFormat& format ) { mAnnotationFormat = format; }
+
+    QgsTextFormat annotationTextFormat() const { return mAnnotationFormat; }
+
     /**
      * Sets the font \a color used for drawing grid annotations.
      * \see annotationFontColor()
@@ -1017,6 +1024,8 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     QFont mGridAnnotationFont;
     //! Font color for grid coordinates
     QColor mGridAnnotationFontColor  = Qt::black;
+    //! Format for drawing grid annotations
+    QgsTextFormat mAnnotationFormat;
     //! Digits after the dot
     int mGridAnnotationPrecision = 3;
     //! True if coordinate values should be drawn
@@ -1124,18 +1133,18 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     /**
      * Draw coordinates for mGridAnnotationType Coordinate
-        \param p drawing painter
+        \param context destination render context
         \param expressionContext expression context for evaluating custom annotation formats
         \param extension optional. If specified, nothing will be drawn and instead the maximum extension for the grid
         annotations will be stored in this variable.
      */
-    void drawCoordinateAnnotations( QPainter *p, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotations( QgsRenderContext& context, QgsExpressionContext &expressionContext, GridExtension *extension = nullptr ) const;
 
     /**
      * Draw an annotation. If optional extension argument is specified, nothing will be drawn and instead
      * the extension of the annotation outside of the map frame will be stored in this variable.
      */
-    void drawCoordinateAnnotation( QPainter *p, GridLineAnnotation annot, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
+    void drawCoordinateAnnotation( QgsRenderContext& context, GridLineAnnotation annot, const QString &annotationString, AnnotationCoordinate coordinateType, GridExtension *extension = nullptr ) const;
 
     // /**
     //  * Sets xpos, ypos, anchor and rotation from a tickmark to be used by drawCoordinateAnnotation()
