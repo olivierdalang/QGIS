@@ -1818,13 +1818,13 @@ bool QgsLayoutItemMapGrid::shouldShowDivisionForSide( QgsLayoutItemMapGrid::Anno
   switch ( side )
   {
     case QgsLayoutItemMapGrid::Left:
-      return shouldShowForDisplayMode( coordinate, mLeftFrameDivisions );
+      return testFrameSideFlag( QgsLayoutItemMapGrid::FrameLeft ) && shouldShowForDisplayMode( coordinate, mLeftFrameDivisions );
     case QgsLayoutItemMapGrid::Right:
-      return shouldShowForDisplayMode( coordinate, mRightFrameDivisions );
+      return testFrameSideFlag( QgsLayoutItemMapGrid::FrameRight ) && shouldShowForDisplayMode( coordinate, mRightFrameDivisions );
     case QgsLayoutItemMapGrid::Top:
-      return shouldShowForDisplayMode( coordinate, mTopFrameDivisions );
+      return testFrameSideFlag( QgsLayoutItemMapGrid::FrameTop ) && shouldShowForDisplayMode( coordinate, mTopFrameDivisions );
     case QgsLayoutItemMapGrid::Bottom:
-      return shouldShowForDisplayMode( coordinate, mBottomFrameDivisions );
+      return testFrameSideFlag( QgsLayoutItemMapGrid::FrameBottom ) && shouldShowForDisplayMode( coordinate, mBottomFrameDivisions );
   }
   return false; // no warnings
 }
