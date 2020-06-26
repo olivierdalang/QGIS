@@ -1206,8 +1206,9 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
   double f = mEvaluatedAnnotationFrameDistance;
 
   // Adapt distance to frame using the frame width and line thickness into account
-  bool hasInteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks );
-  bool hasExteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical );
+  bool isOverTick = ( anotDir == QgsLayoutItemMapGrid::AboveTick || anotDir == QgsLayoutItemMapGrid::OnTick || anotDir == QgsLayoutItemMapGrid::UnderTick );
+  bool hasInteriorMargin = ! isOverTick && ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks );
+  bool hasExteriorMargin = ! isOverTick && ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical );
   bool hasBorderWidth = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorder || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorderNautical );
   if ( ( anotPos == QgsLayoutItemMapGrid::InsideMapFrame && hasInteriorMargin) || ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && hasExteriorMargin ) )
     f += mEvaluatedGridFrameWidth;

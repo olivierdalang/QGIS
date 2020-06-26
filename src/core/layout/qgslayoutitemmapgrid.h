@@ -1073,10 +1073,10 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     QColor mGridFrameFillColor2 = Qt::black;
     double mCrossLength = 3.0;
     double mGridFrameMargin = 0.0;
-    bool mRotatedTicksEnabled;
+    bool mRotatedTicksEnabled = false;
     TickLengthMode mRotatedTicksLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
     double mRotatedTicksMinimumAngle = 30.0;
-    bool mRotatedAnnotationsEnabled;
+    bool mRotatedAnnotationsEnabled = false;
     TickLengthMode mRotatedAnnotationsLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
     double mRotatedAnnotationsMinimumAngle = 30.0;
 
