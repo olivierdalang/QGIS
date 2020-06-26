@@ -1193,15 +1193,7 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
 
   AnnotationPosition anotPos = annotationPosition( frameBorder );
   AnnotationDirection anotDir = annotationDirection( frameBorder );
-  if (
-    // anotDir == QgsLayoutItemMapGrid::Horizontal ||
-    // anotDir == QgsLayoutItemMapGrid::Vertical ||
-    // anotDir == QgsLayoutItemMapGrid::VerticalDescending ||
-    anotDir == QgsLayoutItemMapGrid::BoundaryDirection ||
-    anotDir == QgsLayoutItemMapGrid::AboveTick ||
-    anotDir == QgsLayoutItemMapGrid::OnTick ||
-    anotDir == QgsLayoutItemMapGrid::UnderTick
-  )
+  if ( true )
   {
 
     // If the angle is below the threshold, we don't draw the annotation
@@ -1221,7 +1213,7 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     if ( ( anotPos == QgsLayoutItemMapGrid::InsideMapFrame && hasInteriorMargin) || ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && hasExteriorMargin ) )
       f += mEvaluatedGridFrameWidth;
     if ( hasBorderWidth )
-      f +=  mEvaluatedGridFrameLineThickness / 2.0;
+      f += mEvaluatedGridFrameLineThickness / 2.0;
 
     if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
       f *= -1;
@@ -1235,6 +1227,8 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     xpos = pos.x();
     ypos = pos.y();
 
+    bool outside = ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame );
+
     if (
       anotDir == QgsLayoutItemMapGrid::AboveTick ||
       anotDir == QgsLayoutItemMapGrid::OnTick ||
@@ -1247,17 +1241,11 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
       if ( rotation <= -90 || rotation > 90 )
       {
         rotation += 180;
-        if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-          anchor.setX( 0 ); // left
-        else
-          anchor.setX( textWidth ); // right
+        anchor.setX( outside ? 0 : textWidth ); // left / right
       }
       else
       {
-        if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-          anchor.setX( textWidth ); // right
-        else
-          anchor.setX( 0 ); // left
+        anchor.setX( outside ? textWidth : 0 ); // right / left
       }
 
       if ( anotDir == QgsLayoutItemMapGrid::AboveTick )
@@ -1270,24 +1258,45 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     }
     else if ( anotDir == QgsLayoutItemMapGrid::Horizontal )
     {
-      QVector2D borderVector = borderToVector2D( annot.border );
       rotation = 0;
       anchor.setX( 0.5 * textWidth ); // center
       anchor.setY( -0.5 * textHeight ); // middle
+      if ( frameBorder == QgsLayoutItemMapGrid::Top )
+        anchor.setY( 0 ); // bottom
+      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+        anchor.setX( outside ? 0 : textWidth ); // left / right
+      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+        anchor.setY( -textHeight ); // top
+      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+        anchor.setX( outside ? textWidth : 0 ); // right / left
     }
     else if ( anotDir == QgsLayoutItemMapGrid::Vertical )
     {
-      QVector2D borderVector = borderToVector2D( annot.border );
-      rotation = 90;
-      anchor.setX( 0.5 * textWidth ); // center
-      anchor.setY( -0.5 * textHeight ); // middle
-    }
-    else if ( anotDir == QgsLayoutItemMapGrid::VerticalDescending )
-    {
-      QVector2D borderVector = borderToVector2D( annot.border );
       rotation = -90;
       anchor.setX( 0.5 * textWidth ); // center
       anchor.setY( -0.5 * textHeight ); // middle
+      if ( frameBorder == QgsLayoutItemMapGrid::Top )
+        anchor.setX( outside ? 0 : textWidth ); // left / right
+      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+        anchor.setY( -textHeight ); // top
+      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+        anchor.setX( outside ? textWidth : 0 ); // right / left
+      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+        anchor.setY( 0 ); // bottom
+    }
+    else if ( anotDir == QgsLayoutItemMapGrid::VerticalDescending )
+    {
+      rotation = 90;
+      anchor.setX( 0.5 * textWidth ); // center
+      anchor.setY( -0.5 * textHeight ); // middle
+      if ( frameBorder == QgsLayoutItemMapGrid::Top )
+        anchor.setX( textWidth ); // right
+      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+        anchor.setY( outside ? 0 : textHeight ); // bottom / top
+      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+        anchor.setX( 0 ); // left
+      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+        anchor.setY( outside ? -textHeight : 0 ); // top / bottom
     }
     else // ( anotDir == QgsLayoutItemMapGrid::BoundaryDirection )
     {
