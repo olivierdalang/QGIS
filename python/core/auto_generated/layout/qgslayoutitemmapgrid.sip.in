@@ -579,7 +579,7 @@ Returns whether annotations are shown for the grid.
 
     QgsTextFormat annotationTextFormat() const;
 
-    void setAnnotationFont( const QFont &font );
+ void setAnnotationFont( const QFont &font ) /Deprecated/;
 %Docstring
 Sets the ``font`` used for drawing grid annotations.
 
@@ -589,7 +589,7 @@ Sets the ``font`` used for drawing grid annotations.
    use annotationTextFormat().setFont() instead
 %End
 
-    QFont annotationFont() const;
+ QFont annotationFont() const /Deprecated/;
 %Docstring
 Returns the font used for drawing grid annotations.
 
@@ -599,7 +599,7 @@ Returns the font used for drawing grid annotations.
    use annotationTextFormat().font() instead
 %End
 
-    void setAnnotationFontColor( const QColor &color );
+ void setAnnotationFontColor( const QColor &color ) /Deprecated/;
 %Docstring
 Sets the font ``color`` used for drawing grid annotations.
 
@@ -609,7 +609,7 @@ Sets the font ``color`` used for drawing grid annotations.
    use annotationTextFormat().setColor() instead
 %End
 
-    QColor annotationFontColor() const;
+ QColor annotationFontColor() const /Deprecated/;
 %Docstring
 Returns the font color used for drawing grid annotations.
 

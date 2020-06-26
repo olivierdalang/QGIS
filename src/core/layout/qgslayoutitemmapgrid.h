@@ -586,28 +586,28 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
      * \see annotationFont()
      * \deprecated since QGIS 3.16 use annotationTextFormat().setFont() instead
      */
-    void setAnnotationFont( const QFont &font ) { mAnnotationFormat.setFont( font ); mAnnotationFormat.setSize( font.pointSizeF() ); mAnnotationFormat.setSizeUnit( QgsUnitTypes::RenderPoints ); }
+    Q_DECL_DEPRECATED void setAnnotationFont( const QFont &font ) SIP_DEPRECATED { mAnnotationFormat.setFont( font ); mAnnotationFormat.setSize( font.pointSizeF() ); mAnnotationFormat.setSizeUnit( QgsUnitTypes::RenderPoints ); }
 
     /**
      * Returns the font used for drawing grid annotations.
      * \see setAnnotationFont()
      * \deprecated since QGIS 3.16 use annotationTextFormat().font() instead
      */
-    QFont annotationFont() const { return mAnnotationFormat.font(); }
+    Q_DECL_DEPRECATED QFont annotationFont() const SIP_DEPRECATED { return mAnnotationFormat.font(); }
 
     /**
      * Sets the font \a color used for drawing grid annotations.
      * \see annotationFontColor()
      * \deprecated since QGIS 3.16 use annotationTextFormat().setColor() instead
      */
-    void setAnnotationFontColor( const QColor &color ) { mAnnotationFormat.setColor( color ); mAnnotationFormat.setOpacity( color.alphaF() ); }
+    Q_DECL_DEPRECATED void setAnnotationFontColor( const QColor &color ) SIP_DEPRECATED { mAnnotationFormat.setColor( color ); mAnnotationFormat.setOpacity( color.alphaF() ); }
 
     /**
      * Returns the font color used for drawing grid annotations.
      * \see setAnnotationFontColor()
      * \deprecated since QGIS 3.16 use annotationTextFormat().color() instead
      */
-    QColor annotationFontColor() const { return mAnnotationFormat.color(); }
+    Q_DECL_DEPRECATED QColor annotationFontColor() const SIP_DEPRECATED { return mAnnotationFormat.color(); }
 
     /**
      * Sets the coordinate \a precision for grid annotations.
