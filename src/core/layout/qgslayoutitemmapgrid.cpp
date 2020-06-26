@@ -172,6 +172,7 @@ QVector2D borderToVector2D( QgsLayoutItemMapGrid::BorderSide border )
     case QgsLayoutItemMapGrid::Bottom:
       return QVector2D( 1, 0 );
   }
+  return QVector2D();
 }
 QVector2D borderToNormal2D( QgsLayoutItemMapGrid::BorderSide border )
 {
