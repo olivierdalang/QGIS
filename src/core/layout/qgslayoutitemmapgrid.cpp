@@ -1193,435 +1193,128 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
 
   AnnotationPosition anotPos = annotationPosition( frameBorder );
   AnnotationDirection anotDir = annotationDirection( frameBorder );
-  if ( true )
+
+
+  // If the angle is below the threshold, we don't draw the annotation
+  if ( annot.angle < mRotatedAnnotationsMinimumAngle * M_PI / 180.0 )
+    return;
+
+  QVector2D normalVector = borderToNormal2D( annot.border );
+  QVector2D vector = ( mRotatedAnnotationsEnabled ) ? annot.vector : normalVector;
+
+  // Distance to frame
+  double f = mEvaluatedAnnotationFrameDistance;
+
+  // Adapt distance to frame using the frame width and line thickness into account
+  bool hasInteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks );
+  bool hasExteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical );
+  bool hasBorderWidth = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorder || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorderNautical );
+  if ( ( anotPos == QgsLayoutItemMapGrid::InsideMapFrame && hasInteriorMargin) || ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && hasExteriorMargin ) )
+    f += mEvaluatedGridFrameWidth;
+  if ( hasBorderWidth )
+    f += mEvaluatedGridFrameLineThickness / 2.0;
+
+  if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
+    f *= -1;
+
+  if ( mRotatedAnnotationsEnabled && mRotatedAnnotationsLengthMode == OrthogonalTicks )
+  {
+    f /= QVector2D::dotProduct( vector, normalVector );
+  }
+
+  QVector2D pos = annot.position + f * vector;
+  xpos = pos.x();
+  ypos = pos.y();
+
+  bool outside = ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame );
+
+  if (
+    anotDir == QgsLayoutItemMapGrid::AboveTick ||
+    anotDir == QgsLayoutItemMapGrid::OnTick ||
+    anotDir == QgsLayoutItemMapGrid::UnderTick
+  )
   {
 
-    // If the angle is below the threshold, we don't draw the annotation
-    if ( annot.angle < mRotatedAnnotationsMinimumAngle * M_PI / 180.0 )
-      return;
+    rotation = atan2( vector.y(), vector.x() ) / M_PI * 180;
 
-    QVector2D normalVector = borderToNormal2D( annot.border );
-    QVector2D vector = ( mRotatedAnnotationsEnabled ) ? annot.vector : normalVector;
+    if ( rotation <= -90 || rotation > 90 )
+    {
+      rotation += 180;
+      anchor.setX( outside ? 0 : textWidth ); // left / right
+    }
+    else
+    {
+      anchor.setX( outside ? textWidth : 0 ); // right / left
+    }
 
-    // Distance to frame
-    double f = mEvaluatedAnnotationFrameDistance;
+    if ( anotDir == QgsLayoutItemMapGrid::AboveTick )
+      anchor.setY( 0.5 * textHeight ); // bottom
+    else if ( anotDir == QgsLayoutItemMapGrid::UnderTick )
+      anchor.setY( -1.5 * textHeight ); // top
+    else // OnTick
+      anchor.setY( -0.5 * textHeight ); // middle
 
-    // Adapt distance to frame using the frame width and line thickness into account
-    bool hasInteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks );
-    bool hasExteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical );
-    bool hasBorderWidth = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorder || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorderNautical );
-    if ( ( anotPos == QgsLayoutItemMapGrid::InsideMapFrame && hasInteriorMargin) || ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && hasExteriorMargin ) )
-      f += mEvaluatedGridFrameWidth;
-    if ( hasBorderWidth )
-      f += mEvaluatedGridFrameLineThickness / 2.0;
-
+  }
+  else if ( anotDir == QgsLayoutItemMapGrid::Horizontal )
+  {
+    rotation = 0;
+    anchor.setX( 0.5 * textWidth ); // center
+    anchor.setY( -0.5 * textHeight ); // middle
+    if ( frameBorder == QgsLayoutItemMapGrid::Top )
+      anchor.setY( 0 ); // bottom
+    else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+      anchor.setX( outside ? 0 : textWidth ); // left / right
+    else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+      anchor.setY( -textHeight ); // top
+    else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+      anchor.setX( outside ? textWidth : 0 ); // right / left
+  }
+  else if ( anotDir == QgsLayoutItemMapGrid::Vertical )
+  {
+    rotation = -90;
+    anchor.setX( 0.5 * textWidth ); // center
+    anchor.setY( -0.5 * textHeight ); // middle
+    if ( frameBorder == QgsLayoutItemMapGrid::Top )
+      anchor.setX( outside ? 0 : textWidth ); // left / right
+    else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+      anchor.setY( -textHeight ); // top
+    else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+      anchor.setX( outside ? textWidth : 0 ); // right / left
+    else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+      anchor.setY( 0 ); // bottom
+  }
+  else if ( anotDir == QgsLayoutItemMapGrid::VerticalDescending )
+  {
+    rotation = 90;
+    anchor.setX( 0.5 * textWidth ); // center
+    anchor.setY( -0.5 * textHeight ); // middle
+    if ( frameBorder == QgsLayoutItemMapGrid::Top )
+      anchor.setX( textWidth ); // right
+    else if ( frameBorder == QgsLayoutItemMapGrid::Right )
+      anchor.setY( outside ? 0 : textHeight ); // bottom / top
+    else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
+      anchor.setX( 0 ); // left
+    else if ( frameBorder == QgsLayoutItemMapGrid::Left )
+      anchor.setY( outside ? -textHeight : 0 ); // top / bottom
+  }
+  else // ( anotDir == QgsLayoutItemMapGrid::BoundaryDirection )
+  {
+    QVector2D borderVector = borderToVector2D( annot.border );
+    rotation = atan2( borderVector.y(), borderVector.x() ) / M_PI * 180;
+    anchor.setX( 0.5 * textWidth ); // center
     if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-      f *= -1;
-
-    if ( mRotatedAnnotationsEnabled && mRotatedAnnotationsLengthMode == OrthogonalTicks )
-    {
-      f /= QVector2D::dotProduct( vector, normalVector );
-    }
-
-    QVector2D pos = annot.position + f * vector;
-    xpos = pos.x();
-    ypos = pos.y();
-
-    bool outside = ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame );
-
-    if (
-      anotDir == QgsLayoutItemMapGrid::AboveTick ||
-      anotDir == QgsLayoutItemMapGrid::OnTick ||
-      anotDir == QgsLayoutItemMapGrid::UnderTick
-    )
-    {
-
-      rotation = atan2( vector.y(), vector.x() ) / M_PI * 180;
-
-      if ( rotation <= -90 || rotation > 90 )
-      {
-        rotation += 180;
-        anchor.setX( outside ? 0 : textWidth ); // left / right
-      }
-      else
-      {
-        anchor.setX( outside ? textWidth : 0 ); // right / left
-      }
-
-      if ( anotDir == QgsLayoutItemMapGrid::AboveTick )
-        anchor.setY( 0.5 * textHeight ); // bottom
-      else if ( anotDir == QgsLayoutItemMapGrid::UnderTick )
-        anchor.setY( -1.5 * textHeight ); // top
-      else // OnTick
-        anchor.setY( -0.5 * textHeight ); // middle
-
-    }
-    else if ( anotDir == QgsLayoutItemMapGrid::Horizontal )
-    {
-      rotation = 0;
-      anchor.setX( 0.5 * textWidth ); // center
-      anchor.setY( -0.5 * textHeight ); // middle
-      if ( frameBorder == QgsLayoutItemMapGrid::Top )
-        anchor.setY( 0 ); // bottom
-      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-        anchor.setX( outside ? 0 : textWidth ); // left / right
-      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-        anchor.setY( -textHeight ); // top
-      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
-        anchor.setX( outside ? textWidth : 0 ); // right / left
-    }
-    else if ( anotDir == QgsLayoutItemMapGrid::Vertical )
-    {
-      rotation = -90;
-      anchor.setX( 0.5 * textWidth ); // center
-      anchor.setY( -0.5 * textHeight ); // middle
-      if ( frameBorder == QgsLayoutItemMapGrid::Top )
-        anchor.setX( outside ? 0 : textWidth ); // left / right
-      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-        anchor.setY( -textHeight ); // top
-      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-        anchor.setX( outside ? textWidth : 0 ); // right / left
-      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
-        anchor.setY( 0 ); // bottom
-    }
-    else if ( anotDir == QgsLayoutItemMapGrid::VerticalDescending )
-    {
-      rotation = 90;
-      anchor.setX( 0.5 * textWidth ); // center
-      anchor.setY( -0.5 * textHeight ); // middle
-      if ( frameBorder == QgsLayoutItemMapGrid::Top )
-        anchor.setX( textWidth ); // right
-      else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-        anchor.setY( outside ? 0 : textHeight ); // bottom / top
-      else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-        anchor.setX( 0 ); // left
-      else if ( frameBorder == QgsLayoutItemMapGrid::Left )
-        anchor.setY( outside ? -textHeight : 0 ); // top / bottom
-    }
-    else // ( anotDir == QgsLayoutItemMapGrid::BoundaryDirection )
-    {
-      QVector2D borderVector = borderToVector2D( annot.border );
-      rotation = atan2( borderVector.y(), borderVector.x() ) / M_PI * 180;
-      anchor.setX( 0.5 * textWidth ); // center
-      if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-        anchor.setY( -textHeight ); // top
-      else
-        anchor.setY( 0 ); // bottom
-    }
-
-    // extents isn't computed accurately
-    if ( extension && anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-      extension->UpdateBorder( frameBorder, f + textWidth );
-
-  }
-  else if ( frameBorder == QgsLayoutItemMapGrid::Left )
-  {
-    if ( mLeftGridAnnotationDisplay == QgsLayoutItemMapGrid::HideAll ||
-         ( coordinateType == Longitude && mLeftGridAnnotationDisplay == QgsLayoutItemMapGrid::LatitudeOnly ) ||
-         ( coordinateType == Latitude && mLeftGridAnnotationDisplay == QgsLayoutItemMapGrid::LongitudeOnly ) )
-    {
-      return;
-    }
-    if ( !testFrameSideFlag( QgsLayoutItemMapGrid::FrameLeft ) )
-    {
-      gridFrameDistance = 0;
-    }
-
-    if ( mLeftGridAnnotationPosition == QgsLayoutItemMapGrid::InsideMapFrame )
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::Vertical || mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos += textHeight + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos += textWidth / 2.0;
-        rotation = 270;
-
-
-      }
-      else if ( mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos += ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos -= textWidth / 2.0;
-        rotation = 90;
-      }
-      else
-      {
-        xpos += mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos += textHeight / 2.0;
-      }
-    }
-    else if ( mLeftGridAnnotationPosition == QgsLayoutItemMapGrid::OutsideMapFrame ) //Outside map frame
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::Vertical || mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos -= ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos += textWidth / 2.0;
-        rotation = 270;
-
-
-        if ( extension )
-          extension->left = std::max( extension->left, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-      }
-      else if ( mLeftGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos -= textHeight + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos -= textWidth / 2.0;
-        rotation = 90;
-        if ( extension )
-          extension->left = std::max( extension->left, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-      }
-      else
-      {
-        xpos -= ( textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos += textHeight / 2.0;
-        if ( extension )
-          extension->left = std::max( extension->left, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-    }
+      anchor.setY( -textHeight ); // top
     else
-    {
-      return;
-    }
+      anchor.setY( 0 ); // bottom
   }
-  else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-  {
-    if ( mRightGridAnnotationDisplay == QgsLayoutItemMapGrid::HideAll ||
-         ( coordinateType == Longitude && mRightGridAnnotationDisplay == QgsLayoutItemMapGrid::LatitudeOnly ) ||
-         ( coordinateType == Latitude && mRightGridAnnotationDisplay == QgsLayoutItemMapGrid::LongitudeOnly ) )
-    {
-      return;
-    }
-    if ( !testFrameSideFlag( QgsLayoutItemMapGrid::FrameRight ) )
-    {
-      gridFrameDistance = 0;
-    }
 
-    if ( mRightGridAnnotationPosition == QgsLayoutItemMapGrid::InsideMapFrame )
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mRightGridAnnotationDirection == QgsLayoutItemMapGrid::Vertical )
-      {
-        xpos -= mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos += textWidth / 2.0;
-        rotation = 270;
-      }
-      else if ( mRightGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending || mRightGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos -= textHeight + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos -= textWidth / 2.0;
-        rotation = 90;
-      }
-      else
-      {
-        xpos -= textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        ypos += textHeight / 2.0;
-      }
-    }
-    else if ( mRightGridAnnotationPosition == QgsLayoutItemMapGrid::OutsideMapFrame )//OutsideMapFrame
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mRightGridAnnotationDirection == QgsLayoutItemMapGrid::Vertical )
-      {
-        xpos += ( textHeight + mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos += textWidth / 2.0;
-        rotation = 270;
-        if ( extension )
-          extension->right = std::max( extension->right, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-      }
-      else if ( mRightGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending || mRightGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos += ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos -= textWidth / 2.0;
-        rotation = 90;
-        if ( extension )
-          extension->right = std::max( extension->right, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-      }
-      else //Horizontal
-      {
-        xpos += ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        ypos += textHeight / 2.0;
-        if ( extension )
-          extension->right = std::max( extension->right, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-    }
+  // extents isn't computed accurately
+  if ( extension && anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
+    extension->UpdateBorder( frameBorder, f + textWidth );
 
-    else
-    {
-      return;
-    }
-  }
-  else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-  {
-    if ( mBottomGridAnnotationDisplay == QgsLayoutItemMapGrid::HideAll ||
-         ( coordinateType == Longitude && mBottomGridAnnotationDisplay == QgsLayoutItemMapGrid::LatitudeOnly ) ||
-         ( coordinateType == Latitude && mBottomGridAnnotationDisplay == QgsLayoutItemMapGrid::LongitudeOnly ) )
-    {
-      return;
-    }
-    if ( !testFrameSideFlag( QgsLayoutItemMapGrid::FrameBottom ) )
-    {
-      gridFrameDistance = 0;
-    }
-
-    if ( mBottomGridAnnotationPosition == QgsLayoutItemMapGrid::InsideMapFrame )
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::Horizontal || mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        ypos -= mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        xpos -= textWidth / 2.0;
-
-
-      }
-      else if ( mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos -= textHeight / 2.0;
-        ypos -= textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        rotation = 90;
-      }
-      else //Vertical
-      {
-        xpos += textHeight / 2.0;
-        ypos -= mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        rotation = 270;
-      }
-    }
-    else if ( mBottomGridAnnotationPosition == QgsLayoutItemMapGrid::OutsideMapFrame ) //OutsideMapFrame
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::Horizontal || mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        ypos += ( mEvaluatedAnnotationFrameDistance + textHeight + gridFrameDistance );
-        xpos -= textWidth / 2.0;
-
-
-        if ( extension )
-        {
-          extension->bottom = std::max( extension->bottom, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-          extension->left = std::max( extension->left, textWidth / 2.0 ); // annotation at bottom left/right may extend outside the bounds
-          extension->right = std::max( extension->right, textWidth / 2.0 );
-        }
-      }
-      else if ( mBottomGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos -= textHeight / 2.0;
-        ypos += gridFrameDistance + mEvaluatedAnnotationFrameDistance;
-        rotation = 90;
-        if ( extension )
-          extension->bottom = std::max( extension->bottom, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-      else //Vertical
-      {
-        xpos += textHeight / 2.0;
-        ypos += ( textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        rotation = 270;
-        if ( extension )
-          extension->bottom = std::max( extension->bottom, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-    }
-
-    else
-    {
-      return;
-    }
-  }
-  else //top
-  {
-    if ( mTopGridAnnotationDisplay == QgsLayoutItemMapGrid::HideAll ||
-         ( coordinateType == Longitude && mTopGridAnnotationDisplay == QgsLayoutItemMapGrid::LatitudeOnly ) ||
-         ( coordinateType == Latitude && mTopGridAnnotationDisplay == QgsLayoutItemMapGrid::LongitudeOnly ) )
-    {
-      return;
-    }
-    if ( !testFrameSideFlag( QgsLayoutItemMapGrid::FrameTop ) )
-    {
-      gridFrameDistance = 0;
-    }
-
-    if ( mTopGridAnnotationPosition == QgsLayoutItemMapGrid::InsideMapFrame )
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mTopGridAnnotationDirection == QgsLayoutItemMapGrid::Horizontal || mTopGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos -= textWidth / 2.0;
-        ypos += textHeight + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-
-
-      }
-      else if ( mTopGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos -= textHeight / 2.0;
-        ypos += mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        rotation = 90;
-      }
-      else //Vertical
-      {
-        xpos += textHeight / 2.0;
-        ypos += textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        rotation = 270;
-      }
-    }
-    else if ( mTopGridAnnotationPosition == QgsLayoutItemMapGrid::OutsideMapFrame ) //OutsideMapFrame
-    {
-      if ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks )
-      {
-        gridFrameDistance = 0;
-      }
-      if ( mTopGridAnnotationDirection == QgsLayoutItemMapGrid::Horizontal || mTopGridAnnotationDirection == QgsLayoutItemMapGrid::BoundaryDirection )
-      {
-        xpos -= textWidth / 2.0;
-        ypos -= ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        if ( extension )
-          extension->top = std::max( extension->top, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textHeight );
-      }
-      else if ( mTopGridAnnotationDirection == QgsLayoutItemMapGrid::VerticalDescending )
-      {
-        xpos -= textHeight / 2.0;
-        ypos -= textWidth + mEvaluatedAnnotationFrameDistance + gridFrameDistance;
-        rotation = 90;
-        if ( extension )
-          extension->top = std::max( extension->top, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-      else //Vertical
-      {
-        xpos += textHeight / 2.0;
-        ypos -= ( mEvaluatedAnnotationFrameDistance + gridFrameDistance );
-        rotation = 270;
-        if ( extension )
-          extension->top = std::max( extension->top, mEvaluatedAnnotationFrameDistance + gridFrameDistance + textWidth );
-      }
-    }
-    else
-    {
-      return;
-    }
-  }
 
   if ( extension || !context.painter() )
     return;
-
 
   context.painter()->save();
   context.painter()->translate( QPointF( xpos, ypos ) );
