@@ -1211,9 +1211,17 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     QVector2D normalVector = borderToNormal2D( annot.border );
     QVector2D vector = ( mRotatedAnnotationsEnabled ) ? annot.vector : normalVector;
 
+    // Distance to frame
     double f = mEvaluatedAnnotationFrameDistance;
-    if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical ) )
+
+    // Adapt distance to frame using the frame width and line thickness into account
+    bool hasInteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::InteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks );
+    bool hasExteriorMargin = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::InteriorExteriorTicks || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical );
+    bool hasBorderWidth = ( mGridFrameStyle == QgsLayoutItemMapGrid::Zebra || mGridFrameStyle == QgsLayoutItemMapGrid::ZebraNautical || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorder || mGridFrameStyle == QgsLayoutItemMapGrid::LineBorderNautical );
+    if ( ( anotPos == QgsLayoutItemMapGrid::InsideMapFrame && hasInteriorMargin) || ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame && hasExteriorMargin ) )
       f += mEvaluatedGridFrameWidth;
+    if ( hasBorderWidth )
+      f +=  mEvaluatedGridFrameLineThickness / 2.0;
 
     if ( anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
       f *= -1;
