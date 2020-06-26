@@ -1023,8 +1023,7 @@ void QgsLayoutItemMapGrid::drawGridFrameTicks( QPainter *p, GridExtension *exten
       if ( extension )
       {
         if ( annotationPosition( annot.border ) == QgsLayoutItemMapGrid::OutsideMapFrame )
-          if ( annot.border == QgsLayoutItemMapGrid::Left || annot.border == QgsLayoutItemMapGrid::Right )
-            extension->UpdateBorder( annot.border, fB );
+          extension->UpdateBorder( annot.border, fB );
         continue;
       }
 
@@ -1311,7 +1310,7 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
 
   // extents isn't computed accurately
   if ( extension && anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
-    extension->UpdateBorder( frameBorder, f + textWidth );
+    extension->UpdateBorder( frameBorder, -f + textWidth );
 
 
   if ( extension || !context.painter() )
