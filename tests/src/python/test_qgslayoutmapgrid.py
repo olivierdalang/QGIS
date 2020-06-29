@@ -660,7 +660,8 @@ class TestQgsLayoutMapGrid(unittest.TestCase):
         map.grid().setAnnotationPosition(QgsLayoutItemMapGrid.OutsideMapFrame, QgsLayoutItemMapGrid.Bottom)
         map.grid().setAnnotationDirection(QgsLayoutItemMapGrid.Horizontal, QgsLayoutItemMapGrid.Right)
         map.grid().setAnnotationDirection(QgsLayoutItemMapGrid.Horizontal, QgsLayoutItemMapGrid.Bottom)
-        map.grid().setAnnotationFontColor(QColor(255, 0, 0, 150))
+        # map.grid().setAnnotationFontColor(QColor(255, 0, 0, 150))
+        map.grid().annotationTextFormat().setColor(QColor(0, 255, 0, 150))
         map.grid().setBlendMode(QPainter.CompositionMode_Overlay)
         map.updateBoundingRect()
 

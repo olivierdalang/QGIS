@@ -982,14 +982,11 @@ bool QgsCompositionConverter::readMapXml( QgsLayoutItemMap *layoutItem, const QD
       mapGrid->setAnnotationDirection( QgsLayoutItemMapGrid::AnnotationDirection( annotationElem.attribute( QStringLiteral( "topDirection" ), QStringLiteral( "0" ) ).toInt() ), QgsLayoutItemMapGrid::Top );
       mapGrid->setAnnotationDirection( QgsLayoutItemMapGrid::AnnotationDirection( annotationElem.attribute( QStringLiteral( "bottomDirection" ), QStringLiteral( "0" ) ).toInt() ), QgsLayoutItemMapGrid::Bottom );
       mapGrid->setAnnotationFrameDistance( annotationElem.attribute( QStringLiteral( "frameDistance" ), QStringLiteral( "0" ) ).toDouble() );
-      QgsTextFormat annotationTextFormat;
       QFont annotationFont;
       annotationFont.fromString( annotationElem.attribute( QStringLiteral( "font" ), QString() ) );
-      annotationTextFormat.setFont( annotationFont );
-      annotationTextFormat.setSize( annotationFont.pointSizeF() );
-      annotationTextFormat.setSizeUnit( QgsUnitTypes::RenderPoints );
-      annotationTextFormat.setColor( QgsSymbolLayerUtils::decodeColor( itemElem.attribute( QStringLiteral( "fontColor" ), QStringLiteral( "0,0,0,255" ) ) ) );
-      mapGrid->setAnnotationTextFormat( annotationTextFormat );
+      mapGrid->setAnnotationFont( annotationFont );
+      mapGrid->setAnnotationFontColor( QgsSymbolLayerUtils::decodeColor( itemElem.attribute( QStringLiteral( "fontColor" ), QStringLiteral( "0,0,0,255" ) ) ) );
+
       mapGrid->setAnnotationPrecision( annotationElem.attribute( QStringLiteral( "precision" ), QStringLiteral( "3" ) ).toInt() );
     }
     layoutItem->mGridStack->addGrid( mapGrid );

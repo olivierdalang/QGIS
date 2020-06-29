@@ -589,35 +589,39 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
      * \see setAnnotationTextFormat()
      * \since QGIS 3.16
      */
-    QgsTextFormat annotationTextFormat() const { return mAnnotationFormat; }
+    const QgsTextFormat *annotationTextFormat() const { return &mAnnotationFormat; }
 
     /**
      * Sets the \a font used for drawing grid annotations.
+     * Shortcut for annotationTextFormat()->setFont().
      * \see annotationFont()
-     * \deprecated since QGIS 3.16 use annotationTextFormat().setFont() instead
+     * \see annotationTextFormat()
      */
-    Q_DECL_DEPRECATED void setAnnotationFont( const QFont &font ) SIP_DEPRECATED { mAnnotationFormat.setFont( font ); mAnnotationFormat.setSize( font.pointSizeF() ); mAnnotationFormat.setSizeUnit( QgsUnitTypes::RenderPoints ); }
+    void setAnnotationFont( const QFont &font ) { mAnnotationFormat.setFont( font ); mAnnotationFormat.setSize( font.pointSizeF() ); mAnnotationFormat.setSizeUnit( QgsUnitTypes::RenderPoints ); }
 
     /**
      * Returns the font used for drawing grid annotations.
+     * Shortcut for annotationTextFormat()->font().
      * \see setAnnotationFont()
-     * \deprecated since QGIS 3.16 use annotationTextFormat().font() instead
+     * \see annotationTextFormat()
      */
-    Q_DECL_DEPRECATED QFont annotationFont() const SIP_DEPRECATED { return mAnnotationFormat.font(); }
+    QFont annotationFont() const { return mAnnotationFormat.font(); }
 
     /**
      * Sets the font \a color used for drawing grid annotations.
+     * Shortcut for annotationTextFormat()->setColor() and annotationTextFormat()->setOpacity().
      * \see annotationFontColor()
-     * \deprecated since QGIS 3.16 use annotationTextFormat().setColor() instead
+     * \see annotationTextFormat()
      */
-    Q_DECL_DEPRECATED void setAnnotationFontColor( const QColor &color ) SIP_DEPRECATED { mAnnotationFormat.setColor( color ); mAnnotationFormat.setOpacity( color.alphaF() ); }
+    void setAnnotationFontColor( const QColor &color ) { mAnnotationFormat.setColor( color ); mAnnotationFormat.setOpacity( color.alphaF() ); }
 
     /**
      * Returns the font color used for drawing grid annotations.
+     * Shortcut for annotationTextFormat()->color() and annotationTextFormat()->opacity().
      * \see setAnnotationFontColor()
-     * \deprecated since QGIS 3.16 use annotationTextFormat().color() instead
+     * \see annotationTextFormat()
      */
-    Q_DECL_DEPRECATED QColor annotationFontColor() const SIP_DEPRECATED { return mAnnotationFormat.color(); }
+    QColor annotationFontColor() const { QColor col = mAnnotationFormat.color(); col.setAlphaF( mAnnotationFormat.opacity() ); return col; }
 
     /**
      * Sets the coordinate \a precision for grid annotations.
