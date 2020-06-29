@@ -576,8 +576,22 @@ Returns whether annotations are shown for the grid.
 %End
 
     void setAnnotationTextFormat( const QgsTextFormat &format );
+%Docstring
+Sets the text format used for drawing grid annotations.
+
+.. seealso:: :py:func:`annotationTextFormat`
+
+.. versionadded:: 3.16
+%End
 
     QgsTextFormat annotationTextFormat() const;
+%Docstring
+Returns the text format used for drawing grid annotations.
+
+.. seealso:: :py:func:`setAnnotationTextFormat`
+
+.. versionadded:: 3.16
+%End
 
  void setAnnotationFont( const QFont &font ) /Deprecated/;
 %Docstring

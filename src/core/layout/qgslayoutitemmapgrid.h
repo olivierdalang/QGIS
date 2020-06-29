@@ -577,8 +577,18 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
      */
     bool annotationEnabled() const { return mShowGridAnnotation; }
 
+    /**
+     * Sets the text format used for drawing grid annotations.
+     * \see annotationTextFormat()
+     * \since QGIS 3.16
+     */
     void setAnnotationTextFormat( const QgsTextFormat &format ) { mAnnotationFormat = format; }
 
+    /**
+     * Returns the text format used for drawing grid annotations.
+     * \see setAnnotationTextFormat()
+     * \since QGIS 3.16
+     */
     QgsTextFormat annotationTextFormat() const { return mAnnotationFormat; }
 
     /**
