@@ -1011,6 +1011,17 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
             break;
         }
       }
+
+      /**
+       * Updates all borders of the extension
+       */
+      void UpdateAll( double value )
+      {
+        left = std::max( left, value );
+        right = std::max( right, value );
+        top = std::max( top, value );
+        bottom = std::max( bottom, value );
+      }
     };
 
     struct GridLineAnnotation

@@ -1311,7 +1311,11 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
 
   // extents isn't computed accurately
   if ( extension && anotPos == QgsLayoutItemMapGrid::OutsideMapFrame )
+  {
     extension->UpdateBorder( frameBorder, -f + textWidth );
+    // We also add a general margin, can be useful for labels near corners
+    extension->UpdateAll( textWidth / 2.0 );
+  }
 
 
   if ( extension || !context.painter() )
