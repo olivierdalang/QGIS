@@ -1329,7 +1329,7 @@ void QgsLayoutMapGridWidget::cleanUpGridAnnotationTextFormat( QgsPanelWidget *co
 
 void QgsLayoutMapGridWidget::mAnnotationFontButton_clicked()
 {
-  QgsTextFormatPanelWidget *w = new QgsTextFormatPanelWidget( *mMapGrid->annotationTextFormat() );
+  QgsTextFormatPanelWidget *w = new QgsTextFormatPanelWidget( mMapGrid->annotationTextFormat() );
 
   connect( w, SIGNAL( widgetChanged() ), this, SLOT( updateGridAnnotationTextFormat() ) );
   connect( w, SIGNAL( panelAccepted( QgsPanelWidget * ) ), this, SLOT( cleanUpGridAnnotationTextFormat( QgsPanelWidget * ) ) );

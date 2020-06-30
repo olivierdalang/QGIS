@@ -586,14 +586,26 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     /**
      * Returns the text format used for drawing grid annotations.
+     *
+     * \code{cpp}
+     * grid.annotationTextFormat().setColor( QColor(255, 0, 0) );
+     * \endcode{cpp}
+     *
      * \see setAnnotationTextFormat()
      * \since QGIS 3.16
      */
-    const QgsTextFormat *annotationTextFormat() const { return &mAnnotationFormat; }
+    QgsTextFormat &annotationTextFormat() { return mAnnotationFormat; }
+
+    /**
+     * Returns the text format used for drawing grid annotations (const version).
+     * \see setAnnotationTextFormat()
+     * \since QGIS 3.16
+     */
+    const QgsTextFormat annotationTextFormat() const SIP_SKIP { return mAnnotationFormat; }
 
     /**
      * Sets the \a font used for drawing grid annotations.
-     * Shortcut for annotationTextFormat()->setFont().
+     * Shortcut for annotationTextFormat().setFont().
      * \see annotationFont()
      * \see annotationTextFormat()
      */
@@ -601,7 +613,7 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     /**
      * Returns the font used for drawing grid annotations.
-     * Shortcut for annotationTextFormat()->font().
+     * Shortcut for annotationTextFormat().font().
      * \see setAnnotationFont()
      * \see annotationTextFormat()
      */
@@ -609,7 +621,7 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     /**
      * Sets the font \a color used for drawing grid annotations.
-     * Shortcut for annotationTextFormat()->setColor() and annotationTextFormat()->setOpacity().
+     * Shortcut for annotationTextFormat().setColor() and annotationTextFormat().setOpacity().
      * \see annotationFontColor()
      * \see annotationTextFormat()
      */
@@ -617,7 +629,7 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
 
     /**
      * Returns the font color used for drawing grid annotations.
-     * Shortcut for annotationTextFormat()->color() and annotationTextFormat()->opacity().
+     * Shortcut for annotationTextFormat().color() and annotationTextFormat().opacity().
      * \see setAnnotationFontColor()
      * \see annotationTextFormat()
      */
