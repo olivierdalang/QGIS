@@ -1112,10 +1112,10 @@ class CORE_EXPORT QgsLayoutItemMapGrid : public QgsLayoutItemMapItem
     double mGridFrameMargin = 0.0;
     bool mRotatedTicksEnabled = false;
     TickLengthMode mRotatedTicksLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
-    double mRotatedTicksMinimumAngle = 30.0;
+    double mRotatedTicksMinimumAngle = 0.0;
     bool mRotatedAnnotationsEnabled = false;
     TickLengthMode mRotatedAnnotationsLengthMode = QgsLayoutItemMapGrid::OrthogonalTicks;
-    double mRotatedAnnotationsMinimumAngle = 30.0;
+    double mRotatedAnnotationsMinimumAngle = 0.0;
 
     double mMinimumIntervalWidth = 50;
     double mMaximumIntervalWidth = 100;
