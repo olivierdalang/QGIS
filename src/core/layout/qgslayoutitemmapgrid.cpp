@@ -1262,11 +1262,11 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     anchor.setX( 0.5 * textWidth ); // center
     anchor.setY( -0.5 * textHeight ); // middle
     if ( frameBorder == QgsLayoutItemMapGrid::Top )
-      anchor.setY( 0 ); // bottom
+      anchor.setY( outside ? 0 : -textHeight ); // bottom / top
     else if ( frameBorder == QgsLayoutItemMapGrid::Right )
       anchor.setX( outside ? 0 : textWidth ); // left / right
     else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-      anchor.setY( -textHeight ); // top
+      anchor.setY( outside ? -textHeight : 0 ); // top / bottom
     else if ( frameBorder == QgsLayoutItemMapGrid::Left )
       anchor.setX( outside ? textWidth : 0 ); // right / left
   }
@@ -1278,11 +1278,11 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     if ( frameBorder == QgsLayoutItemMapGrid::Top )
       anchor.setX( outside ? 0 : textWidth ); // left / right
     else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-      anchor.setY( -textHeight ); // top
+      anchor.setY( outside ? -textHeight : 0 ); // top / bottom
     else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
       anchor.setX( outside ? textWidth : 0 ); // right / left
     else if ( frameBorder == QgsLayoutItemMapGrid::Left )
-      anchor.setY( 0 ); // bottom
+      anchor.setY( outside ? 0 : -textHeight ); // bottom / top
   }
   else if ( anotDir == QgsLayoutItemMapGrid::VerticalDescending )
   {
@@ -1290,11 +1290,11 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     anchor.setX( 0.5 * textWidth ); // center
     anchor.setY( -0.5 * textHeight ); // middle
     if ( frameBorder == QgsLayoutItemMapGrid::Top )
-      anchor.setX( textWidth ); // right
+      anchor.setX( outside ? textWidth : 0 ); // right / left
     else if ( frameBorder == QgsLayoutItemMapGrid::Right )
       anchor.setY( outside ? 0 : textHeight ); // bottom / top
     else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
-      anchor.setX( 0 ); // left
+      anchor.setX( outside ? 0 : textWidth ); // left / right
     else if ( frameBorder == QgsLayoutItemMapGrid::Left )
       anchor.setY( outside ? -textHeight : 0 ); // top / bottom
   }
