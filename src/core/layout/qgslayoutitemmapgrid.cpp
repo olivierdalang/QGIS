@@ -1299,14 +1299,13 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
   if ( extension || !context.painter() )
     return;
 
-  context.painter()->save();
+  QgsScopedQPainterState painterState( context.painter() );
   context.painter()->translate( QPointF( xpos, ypos ) );
   context.painter()->rotate( rotation );
   context.painter()->translate( -anchor );
   double dotsPerMM = context.painter()->device()->logicalDpiX() / 25.4;
   context.painter()->scale( 1 / dotsPerMM, 1 / dotsPerMM ); //scale painter from mm to dots
   QgsTextRenderer::drawText( QPointF( 0, 0 ), 0, QgsTextRenderer::AlignLeft, QStringList() << annotationString, context, mAnnotationFormat );
-  context.painter()->restore();
 }
 
 QString QgsLayoutItemMapGrid::gridAnnotationString( double value, QgsLayoutItemMapGrid::AnnotationCoordinate coord, QgsExpressionContext &expressionContext ) const
