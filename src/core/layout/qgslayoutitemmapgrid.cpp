@@ -903,8 +903,6 @@ void QgsLayoutItemMapGrid::drawGridFrameZebraBorder( QPainter *p, BorderSide bor
       if ( ! shouldShowDivisionForSide( it->coordinateType, annot.border ) )
         continue;
 
-      QPointF p = ( i == 0 ) ? it->line.first() : it->line.last();
-
       if ( border == QgsLayoutItemMapGrid::Left || border == QgsLayoutItemMapGrid::Right )
         pos.insert( annot.position.y(), it->coordinate );
       else
