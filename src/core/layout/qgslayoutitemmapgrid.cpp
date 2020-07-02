@@ -1168,29 +1168,6 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
   QPointF anchor = QPointF();
   int rotation = 0;
 
-  double gridFrameDistance = 0;
-  switch ( mGridFrameStyle )
-  {
-    case InteriorTicks:
-    case ExteriorTicks:
-    case InteriorExteriorTicks:
-      gridFrameDistance = mEvaluatedGridFrameWidth;
-      break;
-
-    case QgsLayoutItemMapGrid::Zebra:
-    case QgsLayoutItemMapGrid::ZebraNautical:
-      gridFrameDistance = mEvaluatedGridFrameWidth + ( mEvaluatedGridFrameLineThickness / 2.0 );
-      break;
-
-    case QgsLayoutItemMapGrid::LineBorder:
-    case QgsLayoutItemMapGrid::LineBorderNautical:
-      gridFrameDistance = mEvaluatedGridFrameLineThickness / 2.0;
-      break;
-
-    case QgsLayoutItemMapGrid::NoFrame:
-      break;
-  }
-
   AnnotationPosition anotPos = annotationPosition( frameBorder );
   AnnotationDirection anotDir = annotationDirection( frameBorder );
 
