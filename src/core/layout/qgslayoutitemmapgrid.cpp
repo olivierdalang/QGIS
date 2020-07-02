@@ -894,18 +894,21 @@ void QgsLayoutItemMapGrid::drawGridFrameZebraBorder( QPainter *p, BorderSide bor
     // for first and last point of the line
     for ( int i = 0 ; i < 2 ; ++i )
     {
-      BorderSide thisBorder = ( i == 0 ) ? it->startAnnotation.border : it->endAnnotation.border;
+      GridLineAnnotation annot = ( i == 0 ) ? it->startAnnotation : it->endAnnotation;
 
       // we skip if the point is on another border
-      if ( thisBorder != border )
+      if ( annot.border != border )
+        continue;
+
+      if ( ! shouldShowDivisionForSide( it->coordinateType, annot.border ) )
         continue;
 
       QPointF p = ( i == 0 ) ? it->line.first() : it->line.last();
 
       if ( border == QgsLayoutItemMapGrid::Left || border == QgsLayoutItemMapGrid::Right )
-        pos.insert( p.y(), it->coordinate );
+        pos.insert( annot.position.y(), it->coordinate );
       else
-        pos.insert( p.x(), it->coordinate );
+        pos.insert( annot.position.x(), it->coordinate );
     }
   }
 
@@ -1023,7 +1026,7 @@ void QgsLayoutItemMapGrid::drawGridFrameTicks( QPainter *p, GridExtension *exten
       // extents isn't computed accurately
       if ( extension )
       {
-        if ( annotationPosition( annot.border ) == QgsLayoutItemMapGrid::OutsideMapFrame )
+        if ( mGridFrameStyle != QgsLayoutItemMapGrid::InteriorTicks )
           extension->UpdateBorder( annot.border, fB );
         continue;
       }
@@ -1043,7 +1046,7 @@ void QgsLayoutItemMapGrid::drawGridFrameTicks( QPainter *p, GridExtension *exten
       else // InteriorExteriorTicks
       {
         pA = annot.position - fB * vector;
-        pB = annot.position + fB * vector;
+        pB = annot.position + ( fB - 2.0 * mEvaluatedGridFrameMargin ) * vector;
       }
       p->drawLine( QLineF( pA.toPointF(), pB.toPointF() ) );
 
@@ -1269,7 +1272,7 @@ void QgsLayoutItemMapGrid::drawCoordinateAnnotation( QgsRenderContext &context, 
     if ( frameBorder == QgsLayoutItemMapGrid::Top )
       anchor.setX( outside ? textWidth : 0 ); // right / left
     else if ( frameBorder == QgsLayoutItemMapGrid::Right )
-      anchor.setY( outside ? 0 : textHeight ); // bottom / top
+      anchor.setY( outside ? 0 : -textHeight ); // bottom / top
     else if ( frameBorder == QgsLayoutItemMapGrid::Bottom )
       anchor.setX( outside ? 0 : textWidth ); // left / right
     else if ( frameBorder == QgsLayoutItemMapGrid::Left )
