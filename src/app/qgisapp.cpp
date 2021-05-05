@@ -538,7 +538,7 @@ static void setTitleBarText_( QWidget &qgisApp )
       caption += QStringLiteral( " [%1]" ).arg( profile->name() );
   }
 
-  qgisApp.setWindowTitle( caption );
+  qgisApp.setWindowTitle( caption + QStringLiteral( " | /!\\ LOCAL DEV /!\\" ) );
 }
 
 /**
