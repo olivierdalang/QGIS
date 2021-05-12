@@ -2535,6 +2535,47 @@ void QgsVertexTool::toggleVertexCurve()
 
   if ( success )
   {
+    
+    if(mDraggingVertex && mDraggingVertexType == AddingVertex)
+    {
+      
+      QgsPointXY v0 = geom.vertexAt( mDraggingVertex->vertexId - 1 );
+      QgsPointXY vN = geom.vertexAt( mDraggingVertex->vertexId );
+      QgsPointXY v1 = geom.vertexAt( mDraggingVertex->vertexId + 1 );
+
+      // QgsPointXY map_v0 = toMapCoordinates( m.layer(), v0 );
+      // QgsPointXY map_v1 = toMapCoordinates( m.layer(), v1 );
+
+      // if ( v0.x() != 0 || v0.y() != 0 )
+      //   addDragBand( map_v0, m.point() );
+      // if ( v1.x() != 0 || v1.y() != 0 )
+      //   addDragBand( map_v1, m.point() );
+      
+      // if ( v0.x() != 0 || v0.y() != 0 )
+      //   addDragBand( map_v0, m.point() );
+      // if ( v1.x() != 0 || v1.y() != 0 )
+      //   addDragBand( map_v1, m.point() );
+      // auto cirularBand = CircularBand();
+      
+      addDragCircularBand(mDraggingVertex->layer, v0, vN, v1, false, true, false, vN);
+      // mDragCircularBands.append();
+      
+      // for ( int i = 0; i < mDragStraightBands.count(); ++i )
+      // {
+      //   StraightBand &b = mDragStraightBands[i];
+      //   if ( b.moving0 )
+      //     b.band->movePoint( 0, mapPoint + b.offset0 );
+      //   if ( b.moving1 )
+      //     b.band->movePoint( 1, mapPoint + b.offset1 );
+      // }
+
+      // for ( int i = 0; i < mDragCircularBands.count(); ++i )
+      // {
+      //   CircularBand &b = mDragCircularBands[i];
+      //   b.updateRubberBand( mapPoint );
+      // }
+    }
+    
     layer->changeGeometry( toConvert.fid, geom );
     layer->endEditCommand();
     layer->triggerRepaint();
