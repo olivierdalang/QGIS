@@ -574,51 +574,41 @@ bool QgsGeometry::toggleCircularAtVertex( int atVertex )
     return false;
 
   bool success = false;
-  QgsCompoundCurve *cpdCurve  = qgsgeometry_cast<QgsCompoundCurve *>( curve );
-  if ( cpdCurve != nullptr )
+  QgsCompoundCurve *cpdCurve  = qgsgeometry_cast<QgsCompoundCurve*>( curve );
+  if( cpdCurve == nullptr )
   {
-    // If the geom is a already compound curve, we convert inplace, and we're done
-    success = cpdCurve->convertVertex( id );
-  }
-  else
-  {
-    // TODO : move this block before the above, so we call convertVertex only in one place
-    // If the geom is a linestring or cirularstring, we create a compound curve
-    std::unique_ptr<QgsCompoundCurve> cpdCurve = std::make_unique<QgsCompoundCurve>();
+    // The geom is not yet a compound curve (but a circular or linestring).
+    // We replace it by a compound curve.
     cpdCurve->addCurve( curve->clone() );
-    success = cpdCurve->convertVertex( QgsVertexId( -1, -1, id.vertex ) );
 
-    // In that case, we must also reassign the instances
-    if ( success )
+    if ( owningPolygon == nullptr && owningCollection == nullptr )
     {
-
-      if ( owningPolygon == nullptr && owningCollection == nullptr )
+      // Standalone linestring
+      reset( std::make_unique<QgsCompoundCurve>( *cpdCurve ) );
+    }
+    else if ( owningPolygon != nullptr )
+    {
+      // Replace the ring in the owning polygon
+      if ( id.ring == 0 )
       {
-        // Standalone linestring
-        reset( std::make_unique<QgsCompoundCurve>( *cpdCurve ) ); // <- REVIEW PLZ
+        owningPolygon->setExteriorRing( cpdCurve );
       }
-      else if ( owningPolygon != nullptr )
+      else
       {
-        // Replace the ring in the owning polygon
-        if ( id.ring == 0 )
-        {
-          owningPolygon->setExteriorRing( cpdCurve.release() );
-        }
-        else
-        {
-          owningPolygon->removeInteriorRing( id.ring - 1 );
-          owningPolygon->addInteriorRing( cpdCurve.release() );
-        }
-      }
-      else if ( owningCollection != nullptr )
-      {
-        // Replace the curve in the owning collection
-        owningCollection->removeGeometry( id.part );
-        owningCollection->insertGeometry( cpdCurve.release(), id.part );
+        owningPolygon->removeInteriorRing( id.ring - 1 );
+        owningPolygon->addInteriorRing( cpdCurve );
       }
     }
+    else if ( owningCollection != nullptr )
+    {
+      // Replace the curve in the owning collection
+      owningCollection->removeGeometry( id.part );
+      owningCollection->insertGeometry( cpdCurve, id.part );
+    }
   }
-
+  
+  // We convert inplace, and we're done
+  success = cpdCurve->convertVertex( id );
   return success;
 }
 
