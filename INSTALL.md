@@ -582,12 +582,22 @@ cd QGIS
 git config core.filemode false
 ```
 
-### 4.1.4. Configure and build with CMake from command line
+### 4.1.4. Build using package-nightly.cmd
+
+You can run the scripts used for the nightly builds locally like this:
+
+```cmd
+cd C:\OSGeo4W\QGIS\ms-windows\osgeo4w
+package-nightly.cmd 3.27.999 1 x86_64 0000000
+```
+
+If you need more control over the build (e.g. no reconfiguration), run the steps below.
+
+### 4.1.5. Configure and build with CMake from command line
 
 **Note:** Consider this section as example.  It tends to outdate, when OSGeo4W and
-SDKs move on.  `ms-windows/osgeo4w/package-nightly.cmd` is used for the
-nightly builds and constantly updated and hence might contain necessary
-updates that are not yet reflected here.
+SDKs move on. Please refer to `package-nightly.cmd` which is constantly updated and
+hence might contain necessary updates that are not yet reflected here.
 
 To start a command prompt with an environment that both has the VC++ and the OSGeo4W
 variables create the following batch file (assuming the above packages were
@@ -601,7 +611,7 @@ call C:\OSGeo4W\QGIS\ms-windows\osgeo4w\msvc-env.bat
 
 Save the batch file as `C:\OSGeo4W\OSGeo4W-dev.bat` and run it.
 
-#### 4.1.4.1 Using configonly.bat to create the MSVC solution file
+#### 4.1.5.1 Using configonly.bat to create the MSVC solution file
 We will be using the file `ms-windows/osgeo4w/configonly.bat` to create an MSVC solution file.
 There are two supported CMake generators for creating a solution file: Ninja, and native MSVC.
 The advantage of using native MSVC solution is that you can find the root of build problems much more easily.
@@ -612,7 +622,7 @@ cd C:\OSGeo4W\QGIS\ms-windows\osgeo4w
 configonly.bat
 ```
 
-#### 4.1.4.2 Compiling QGIS with MSVC
+#### 4.1.5.2 Compiling QGIS with MSVC
 We will need to run MSVC with all the environment variables set, thus we will run it as follows:
 * Run the batch file OSGeo4W-dev.bat you created before.
 * On the command prompt run `call gdal-dev-env.bat` to add the release gdal and proj libraries to your PATH.
