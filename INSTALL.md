@@ -526,9 +526,9 @@ Select "Custom" install and add the following packages:
 Download and install following packages:
 
 * [CMake](https://cmake.org/files/v3.12/cmake-3.12.3-win64-x64.msi)
-* GNU flex, GNU bison and GIT with cygwin [32bit](https://cygwin.com/setup-x86.exe) or [64bit](https://cygwin.com/setup-x86_64.exe)
-* OSGeo4W [32bit](https://download.osgeo.org/osgeo4w/osgeo4w-setup-x86.exe) or [64bit](https://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe)
-* [ninja](https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-win.zip): Copy the `ninja.exe` to `C:\OSGeo4W64\bin\`
+* GNU flex, GNU bison and GIT with cygwin [64bit](https://cygwin.com/setup-x86_64.exe)
+* OSGeo4W [64bit](https://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe)
+* [ninja](https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-win.zip): Copy the `ninja.exe` to `C:\OSGeo4W\bin\`
 
 For the QGIS build you need to install following packages from cygwin:
 
@@ -544,7 +544,7 @@ and from OSGeo4W (select *Advanced Install*):
 
   * Note: If you install other packages, this might cause issues. Particularly, make sure
     **not** to install the msinttypes package. It installs a stdint.h file in
-    OSGeo4W[64]\include, that conflicts with Visual Studio own stdint.h, which for
+    OSGeo4W\include, that conflicts with Visual Studio own stdint.h, which for
     example breaks the build of the virtual layer provider.
 
 Earlier versions of this document also covered how to build all above
@@ -554,10 +554,10 @@ or the SVN repository.
 ### 4.1.3. Clone the QGIS Source Code
 
 Choose a directory to store the QGIS source code.
-For example, to put it in the OSGeo4W64 install, navigate there:
+For example, to put it in the OSGeo4W install, navigate there:
 
 ```cmd
-cd C:\OSGeo4W64
+cd C:\OSGeo4W
 ```
 
 This directory will be assumed for all instructions
@@ -595,11 +595,11 @@ installed in the default locations):
 
 ```cmd
 @echo off
-call C:\OSGeo4W64\QGIS\ms-windows\osgeo4w\msvc-env.bat x86_64
+call C:\OSGeo4W\QGIS\ms-windows\osgeo4w\msvc-env.bat
 @cmd
 ```
 
-Save the batch file as `C:\OSGeo4W64\OSGeo4W-dev.bat` and run it.
+Save the batch file as `C:\OSGeo4W\OSGeo4W-dev.bat` and run it.
 
 #### 4.1.4.1 Using configonly.bat to create the MSVC solution file
 We will be using the file `ms-windows/osgeo4w/configonly.bat` to create an MSVC solution file.
@@ -608,7 +608,7 @@ The advantage of using native MSVC solution is that you can find the root of bui
 configonly.bat is meant to create a configured build directory with a MSVC solution file:
 
 ```cmd
-cd C:\OSGeo4W64\QGIS\ms-windows\osgeo4w
+cd C:\OSGeo4W\QGIS\ms-windows\osgeo4w
 configonly.bat
 ```
 
