@@ -92,7 +92,7 @@ Following a summary of the required dependencies for building:
 
 Required build tools:
 
-* CMake >= 3.12.0
+* CMake >= 3.15.0
 * Flex >= 2.5.6
 * Bison >= 2.4
 * Python >= 3.7
@@ -525,7 +525,7 @@ Select "Custom" install and add the following packages:
 
 Download and install following packages:
 
-* [CMake](https://cmake.org/files/v3.12/cmake-3.12.3-win64-x64.msi)
+* [CMake](https://cmake.org/files/v3.15/cmake-3.15.7-win64-x64.msi)
 * GNU flex, GNU bison and GIT with cygwin [64bit](https://cygwin.com/setup-x86_64.exe)
 * OSGeo4W [64bit](https://download.osgeo.org/osgeo4w/osgeo4w-setup-x86_64.exe)
 * [ninja](https://github.com/ninja-build/ninja/releases/download/v1.7.2/ninja-win.zip): Copy the `ninja.exe` to `C:\OSGeo4W\bin\`
