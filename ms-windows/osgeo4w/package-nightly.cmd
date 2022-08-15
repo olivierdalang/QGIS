@@ -134,8 +134,8 @@ cmake -G "%CMAKEGEN%" ^
 	-D CMAKE_BUILD_TYPE=%BUILDCONF% ^
 	-D CMAKE_CONFIGURATION_TYPES=%BUILDCONF% ^
 	-D SETUPAPI_LIBRARY="%SETUPAPI_LIBRARY%" ^
-	-D PROJ_LIBRARY=%O4W_ROOT%/apps/proj-dev/lib/proj.lib ^
-	-D PROJ_INCLUDE_DIR=%O4W_ROOT%/apps/proj-dev/include ^
+	-D PROJ_LIBRARY=%O4W_ROOT%/lib ^
+	-D PROJ_INCLUDE_DIR=%O4W_ROOT%/include ^
 	-D GDAL_LIBRARY=%O4W_ROOT%/apps/gdal-dev/lib/gdal_i.lib ^
 	-D GDAL_INCLUDE_DIR=%O4W_ROOT%/apps/gdal-dev/include ^
 	-D GEOS_LIBRARY=%O4W_ROOT%/lib/geos_c.lib ^
