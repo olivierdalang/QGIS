@@ -97,6 +97,12 @@ class GUI_EXPORT QgsAttributeFormEditorWidget : public QgsAttributeFormWidget
   public slots:
 
     /**
+     * Sets whether the widget should be displayed in a "changed values" mode.
+     * \param changed set to TRUE to show in a changed values state
+     */
+    void setIsChanged( bool mixed );
+
+    /**
      * Sets whether the widget should be displayed in a "mixed values" mode.
      * \param mixed set to TRUE to show in a mixed values state
      */

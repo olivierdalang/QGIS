@@ -121,6 +121,12 @@ QgsEditorWidgetWrapper *QgsAttributeFormEditorWidget::editorWidget() const
   return mEditorWidget;
 }
 
+void QgsAttributeFormEditorWidget::setIsChanged( bool changed )
+{
+  mMultiEditButton->setIsChanged( changed );
+  mIsChanged = changed;
+}
+
 void QgsAttributeFormEditorWidget::setIsMixed( bool mixed )
 {
   if ( mEditorWidget && mixed )
@@ -181,7 +187,9 @@ void QgsAttributeFormEditorWidget::editorWidgetValuesChanged( const QVariant &va
     case AggregateSearchMode:
       break;
     case MultiEditMode:
-      mMultiEditButton->setIsChanged( true );
+      // This is now done by the attribute form on all widgets
+      //mMultiEditButton->setIsChanged( true );
+      break;
   }
 
   Q_NOWARN_DEPRECATED_PUSH

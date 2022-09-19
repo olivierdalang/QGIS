@@ -1020,6 +1020,25 @@ void QgsAttributeForm::onAttributeChanged( const QVariant &value, const QVariant
 
         emit widgetValueChanged( eww->field().name(), value, false );
         signalEmitted = true;
+
+        // Update multi edit buttons
+        for ( QgsWidgetWrapper *otherWw : mWidgets )
+        {
+          QgsEditorWidgetWrapper *otherEww = qobject_cast<QgsEditorWidgetWrapper *>( otherWw );
+          if( eww->field().name() == otherEww->field().name() )
+          {
+            QWidget * otherW = otherEww->widget();
+            QgsAttributeFormEditorWidget *otherAfew = qobject_cast<QgsAttributeFormEditorWidget *>( otherW );
+            otherAfew->setIsChanged( true );
+          }
+        }
+        // for ( QgsAttributeFormEditorWidget *otherEww : mFormEditorWidgets.values() )
+        // {
+        //   if( eww->field().name() == otherEww->field().name() )
+        //   {
+        //     otherEww->setIsChanged(true);
+        //   }
+        // };
       }
       break;
     }
