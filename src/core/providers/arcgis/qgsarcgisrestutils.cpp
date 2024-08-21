@@ -1948,4 +1948,3 @@ Qgis::ArcGisRestServiceType QgsArcGisRestUtils::serviceTypeFromString( const QSt
 
   return Qgis::ArcGisRestServiceType::Unknown;
 }
-
