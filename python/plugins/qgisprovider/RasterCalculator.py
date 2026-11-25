@@ -291,25 +291,6 @@ class RasterCalculator(QgisAlgorithm):
                 if not varDescription:
                     continue
 
-                # check if it's description starts with Output as in:
-                #    Output 'Output' from algorithm 'calc1'
-                # as set in https://github.com/qgis/QGIS/blob/master/src/core/processing/models/qgsprocessingmodelalgorithm.cpp#L516
-                # but var in expression is called simply
-                #    'Output' from algorithm 'calc1'
-
-                # get the translation string to use to parse the description
-                # HAVE to use the same translated string as in
-                # https://github.com/qgis/QGIS/blob/master/src/core/processing/models/qgsprocessingmodelalgorithm.cpp#L516
-                translatedDesc = self.tr("Output '%1' from algorithm '%2'")
-                elementZero = translatedDesc.split(" ")[
-                    0
-                ]  # For english the string result should be "Output"
-
-                elements = varDescription.split(" ")
-                if len(elements) > 1 and elements[0] == elementZero:
-                    # remove heading QObject.tr"Output ") string. Note adding a space at the end of elementZero!
-                    varDescription = varDescription[len(elementZero) + 1 :]
-
                 # check if cleaned varDescription is present in the expression
                 # if not skip it
                 if (varDescription + "@") not in expression:

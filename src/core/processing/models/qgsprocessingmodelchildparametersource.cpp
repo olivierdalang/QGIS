@@ -257,11 +257,11 @@ QString QgsProcessingModelChildParameterSource::friendlyIdentifier( QgsProcessin
             break;
           }
         }
-        return QObject::tr( "'%1' from algorithm '%2'" ).arg( outputName, alg.description() );
+        return u"%1 / %2"_s.arg( alg.description(), outputName );
       }
       else
       {
-        return QObject::tr( "'%1' from algorithm '%2'" ).arg( mOutputName, mChildId );
+        return u"%1 / %2"_s.arg( mChildId, mOutputName );
       }
     }
 

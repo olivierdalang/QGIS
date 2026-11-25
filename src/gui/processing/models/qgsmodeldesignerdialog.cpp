@@ -1991,7 +1991,7 @@ void QgsModelChildDependenciesWidget::showDialog()
       if ( dep.conditionalBranch.isEmpty() )
         return description;
       else
-        return tr( "Condition “%1” from algorithm “%2”" ).arg( dep.conditionalBranch, description );
+        return tr( "Condition %1 / %2" ).arg( description, dep.conditionalBranch );
     } );
 
     connect( widget, &QgsProcessingMultipleSelectionPanelWidget::selectionChanged, this, [this, widget]() {

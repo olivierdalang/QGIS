@@ -1279,7 +1279,7 @@ QMap<QString, QgsProcessingModelAlgorithm::VariableDefinition> QgsProcessingMode
         name = u"%1_%2"_s.arg( child.description().isEmpty() ? source.outputChildId() : child.description(), source.outputName() );
         if ( const QgsProcessingAlgorithm *alg = child.algorithm() )
         {
-          description = QObject::tr( "Output '%1' from algorithm '%2'" ).arg( alg->outputDefinition( source.outputName() )->description(), child.description() );
+          description = u"%1 / %2"_s.arg( child.description(), alg->outputDefinition( source.outputName() )->description() );
         }
         value = results.value( source.outputChildId() ).toMap().value( source.outputName() );
         break;
@@ -1323,7 +1323,7 @@ QMap<QString, QgsProcessingModelAlgorithm::VariableDefinition> QgsProcessingMode
         value = results.value( source.outputChildId() ).toMap().value( source.outputName() );
         if ( const QgsProcessingAlgorithm *alg = child.algorithm() )
         {
-          description = QObject::tr( "Output '%1' from algorithm '%2'" ).arg( alg->outputDefinition( source.outputName() )->description(), child.description() );
+          description = u"%1 / %2"_s.arg( child.description(), alg->outputDefinition( source.outputName() )->description() );
         }
         break;
       }
@@ -1382,7 +1382,7 @@ QMap<QString, QgsProcessingModelAlgorithm::VariableDefinition> QgsProcessingMode
         value = results.value( source.outputChildId() ).toMap().value( source.outputName() );
         if ( const QgsProcessingAlgorithm *alg = child.algorithm() )
         {
-          description = QObject::tr( "Output '%1' from algorithm '%2'" ).arg( alg->outputDefinition( source.outputName() )->description(), child.description() );
+          description = u"%1 / %2"_s.arg( child.description(), alg->outputDefinition( source.outputName() )->description() );
         }
         break;
       }
